@@ -2,7 +2,7 @@
   "name": "recharts-scale",
   "version": "0.0.1",
   "description": "Scale of Cartesian Coordinates",
-  "main": "src/scale.js",
+  "main": "index.js",
   "keywords": [
     "Scale",
     "Cartesian Coordinates"
@@ -19,8 +19,7 @@
     "mocha": "~2.2.5"
   },
   "scripts": {
-    "test": "./node_modules/.bin/mocha js:babel/register",
+    "test": "./node_modules/.bin/mocha --compilers js:babel/register",
     "test-cov": "./node_modules/.bin/istanbul cover _mocha"
-  },
-  "license": "MIT"
+  }
 }
