@@ -8,7 +8,6 @@
     "Cartesian Coordinates"
   ],
   "author": "ling.dingl",
-  "license": "MIT",
   "publishConfig": {
     "registry": ""
   },
@@ -22,5 +21,6 @@
   "scripts": {
     "test": "./node_modules/.bin/mocha js:babel/register",
     "test-cov": "./node_modules/.bin/istanbul cover _mocha"
-  }
+  },
+  "license": "MIT"
 }
