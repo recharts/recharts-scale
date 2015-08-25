@@ -4,17 +4,18 @@
  * @date 2015-08-21
  */
 
-
 /**
  * 判断数据是否为浮点类型
+ * @param {Number} num 输入值
+ * @return {Boolean}
  */
-function isFloat (num) {
+function isFloat(num) {
   return /^([+-]?)\d*\.\d+$/.test(num);
 }
 
 /**
  * 获取数值的位数
- * @param  {Number} value
+ * @param  {Number} value 数值
  * @return {Integer} 位数
  * 其中绝对值属于区间[0.1, 1)， 得到的值为0
  * 绝对值属于区间[0.01, 0.1)，得到的位数为 -1
@@ -25,17 +26,16 @@ function getDigitCount (value) {
     return 1;
   }
 
-  return Math.floor(Math.log(Math.abs(value)) / Math.log(10)) + 1
+  return Math.floor(Math.log(Math.abs(value)) / Math.log(10)) + 1;
 }
 
 /**
  * 判断是否为合法的区间，并返回处理后的合法区间
  * @param  {Number} min       最小值
  * @param  {Number} max       最大值
- * @param  {Number} tickCount 刻度数
  * @return {}           [description]
  */
-function getValidInterval ([min, max], tickCount) {
+function getValidInterval ([min, max]) {
   let [validMin, validMax] = [min, max];
 
   // 交换最大值和最小值
@@ -70,11 +70,11 @@ function getFormatStep (roughStep, amendIndex) {
  */
 function getTickOfSingleValue (value, tickCount) {
   let isFlt = isFloat(value),
-      middleIndex = Math.floor((tickCount - 1) / 2),
-      step = 1,
-      start = value,
-      tickMin, tickMax,
-      ticks = [];
+    middleIndex = Math.floor((tickCount - 1) / 2),
+    step = 1,
+    start = value,
+    tickMin, tickMax,
+    ticks = [];
 
   if (isFlt && Math.abs(value) < 1) {
     step = Math.pow(10, getDigitCount(value) - 1);
@@ -103,7 +103,7 @@ function calculateStep (min, max, tickCount, amendIndex = 0) {
   let start, belowCount, upCount, scaleCount;
 
   // 当0属于取值范围时
-  if (0 >= min && 0 <= max) {
+  if (min <= 0 && max >= 0) {
     start = 0;
   } else {
     start = (min + max) / 2;
@@ -141,7 +141,7 @@ function getTickValues (min, max, tickCount = 6) {
   }
 
   // 获取间隔步长
-  let {step, tickMin, tickMax} = calculateStep(min, max, count);
+  let {step, tickMin, tickMax} = calculateStep(cormin, cormax, count);
 
 
   let fixlen = 0;
