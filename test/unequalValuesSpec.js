@@ -4,8 +4,8 @@ import {expect} from 'chai';
 describe('unequal values', () => {
 
   describe('positive interge', () => {
-    let [min, max, count] = [1, 5, 5],
-        scales = scale(min, max, count);
+    const [min, max, count] = [1, 5, 5];
+    const scales = scale(min, max, count);
 
     it('should return five scales', () => {
       expect(scales).to.have.length(count);
@@ -22,8 +22,8 @@ describe('unequal values', () => {
   });
 
   describe('negative and positive interge', () => {
-    let [min, max, count] = [-5, 95, 5],
-        scales = scale(min, max, count);
+    const [min, max, count] = [-5, 95, 5];
+    const scales = scale(min, max, count);
 
     it('should return five scales', () => {
       expect(scales).to.have.length(count);
@@ -40,8 +40,8 @@ describe('unequal values', () => {
   });
 
   describe('negative interger', () => {
-    let [min, max, count] = [-105, -5, 5],
-        scales = scale(min, max, count);
+    const [min, max, count] = [-105, -5, 5];
+    const scales = scale(min, max, count);
 
     it('should return five scales', () => {
       expect(scales).to.have.length(count);
@@ -58,8 +58,8 @@ describe('unequal values', () => {
   });
 
   describe('wrong min & max', () => {
-    let [min, max, count] = [67, 5, 5],
-        scales = scale(min, max, count);
+    const [min, max, count] = [67, 5, 5];
+    const scales = scale(min, max, count);
 
     it('should return scales of length count', () => {
       expect(scales).to.have.length(count);
