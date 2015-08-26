@@ -4,8 +4,8 @@ import {expect} from 'chai';
 describe('equal values', () => {
 
   describe('positive integer', () => {
-    let [min, max, count] = [5, 5, 3],
-        scales = scale(min, max, count);
+    const [min, max, count] = [5, 5, 3];
+    const scales = scale(min, max, count);
 
     it('should return scales of length count', () => {
       expect(scales).to.have.length(count);
@@ -26,8 +26,8 @@ describe('equal values', () => {
   });
 
   describe('negative integer', () => {
-    let [min, max, count] = [-5, -5, 2],
-        scales = scale(min, max, count);
+    const [min, max, count] = [-5, -5, 2];
+    const scales = scale(min, max, count);
 
     it('should return scales of length count', () => {
       expect(scales).to.have.length(count);
@@ -44,8 +44,8 @@ describe('equal values', () => {
   });
 
   describe('all zeros', () => {
-    let [min, max, count] = [0, 0, 5],
-        scales = scale(min, max, count);
+    const [min, max, count] = [0, 0, 5];
+    const scales = scale(min, max, count);
 
     it('should return scales of length count', () => {
       expect(scales).to.have.length(count);
@@ -62,8 +62,8 @@ describe('equal values', () => {
   });
 
   describe('positive decomal', () => {
-    let [min, max, count] = [0.05, 0.05, 3],
-        scales = scale(min, max, count);
+    const [min, max, count] = [0.05, 0.05, 3];
+    const scales = scale(min, max, count);
 
     it('should return scales of length count', () => {
       expect(scales).to.have.length(count);
@@ -84,8 +84,8 @@ describe('equal values', () => {
   });
 
   describe('positive decomal', () => {
-    let [min, max, count] = [5.05, 5.05, 4],
-        scales = scale(min, max, count);
+    const [min, max, count] = [5.05, 5.05, 4];
+    const scales = scale(min, max, count);
 
     it('should return scales of length count', () => {
       expect(scales).to.have.length(count);
