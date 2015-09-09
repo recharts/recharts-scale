@@ -5,6 +5,8 @@
  * @date 2015-08-26
  */
 
+import R from 'ramda';
+
 /**
  * 判断数据是否为浮点类型
  *
@@ -78,24 +80,25 @@ function getFormatStep(roughStep, amendIndex) {
  */
 function getTickOfSingleValue(value, tickCount) {
   const isFlt = isFloat(value);
-  const middleIndex = Math.floor((tickCount - 1) / 2);
-  const ticks = [];
-
   let step = 1;
   let start = value;
 
-  if (isFlt && Math.abs(value) < 1) {
-    step = Math.pow(10, getDigitCount(value) - 1);
-    start = Math.floor(value / step) * step;
-  } else if (isFlt && Math.abs(value) > 1) {
-    start = Math.floor(value);
+  if (isFlt) {
+    const absVal = Math.abs(value);
+
+    if (absVal < 1) {
+      step = Math.pow(10, getDigitCount(value) - 1);
+      start = Math.floor(value / step) * step;
+    } else if (absVal > 1) {
+      start = Math.floor(value);
+    }
   }
 
-  for (let i = 0; i < tickCount; i++) {
-    ticks.push(start + (i - middleIndex) * step);
-  }
+  const middleIndex = Math.floor((tickCount - 1) / 2);
 
-  return ticks;
+  return R.range(0, tickCount).map((i) => {
+    return start + (i - middleIndex) * step;
+  });
 }
 
 /**
@@ -109,7 +112,7 @@ function getTickOfSingleValue(value, tickCount) {
  */
 function calculateStep(min, max, tickCount, amendIndex = 0) {
   // 获取间隔步长
-  const step = getFormatStep((max - min) / (tickCount - 1), amendIndex);
+  const step = parseInt(getFormatStep((max - min) / (tickCount - 1), amendIndex), 10);
   let start;
 
   // 当0属于取值范围时
@@ -171,13 +174,11 @@ function getTickValues(min, max, tickCount = 6) {
     }
   }
 
-  const arr = [];
-
-  for (let i = tickMin; i <= tickMax; i += step) {
-    arr.push(+(parseFloat(i).toFixed(fixlen)));
-  }
-
-  return arr;
+  return R.filter((n) => {
+    return n % step === 0;
+  }, R.range(tickMin, tickMax + 1)).map((n) => {
+    return +(parseFloat(n).toFixed(fixlen));
+  });
 }
 
-export default getTickValues;
+export default R.memoize(getTickValues);
