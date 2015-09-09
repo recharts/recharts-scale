@@ -68,7 +68,8 @@ function getFormatStep(roughStep, amendIndex) {
 
   const amendStepRatio = (Math.ceil(stepRatio / 0.05) + amendIndex) * 0.05;
 
-  return amendStepRatio * Math.pow(10, digitCount);
+  // FIXME: Step有可能为小数
+  return parseInt(amendStepRatio * Math.pow(10, digitCount), 10);
 }
 
 /**
@@ -112,7 +113,7 @@ function getTickOfSingleValue(value, tickCount) {
  */
 function calculateStep(min, max, tickCount, amendIndex = 0) {
   // 获取间隔步长
-  const step = parseInt(getFormatStep((max - min) / (tickCount - 1), amendIndex), 10);
+  const step = getFormatStep((max - min) / (tickCount - 1), amendIndex);
   let start;
 
   // 当0属于取值范围时
