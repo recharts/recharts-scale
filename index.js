@@ -68,8 +68,12 @@ function getFormatStep(roughStep, amendIndex) {
 
   const amendStepRatio = (Math.ceil(stepRatio / 0.05) + amendIndex) * 0.05;
 
-  // FIXME: Step有可能为小数
-  return parseInt(amendStepRatio * Math.pow(10, digitCount), 10);
+  // 处理JS精度问题
+  const fixAmendStepRatio = Math.round(amendStepRatio * 100) / 100;
+
+  const formatStep = fixAmendStepRatio * Math.pow(10, digitCount);
+
+  return formatStep;
 }
 
 /**
