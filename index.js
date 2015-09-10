@@ -97,9 +97,12 @@ function getTickOfSingleValue(value, tickCount) {
 
   const middleIndex = Math.floor((tickCount - 1) / 2);
 
-  return R.range(0, tickCount).map((i) => {
-    return start + (i - middleIndex) * step;
-  });
+  const f = R.compose(
+    R.map(n => { return start + (n - middleIndex) * step; }),
+    R.range
+  );
+
+  return f(0, tickCount);
 }
 
 /**
@@ -175,11 +178,13 @@ function getTickValues(min, max, tickCount = 6) {
     }
   }
 
-  return R.filter((n) => {
-    return n % step === 0;
-  }, R.range(tickMin, tickMax + 1)).map((n) => {
-    return +(parseFloat(n).toFixed(fixlen));
-  });
+  const f = R.compose(
+    R.map((n) => { return +(parseFloat(n).toFixed(fixlen)); }),
+    R.filter((n) => { return n % step === 0; }),
+    R.range
+  );
+
+  return f(tickMin, tickMax + 1);
 }
 
 export default R.memoize(getTickValues);
