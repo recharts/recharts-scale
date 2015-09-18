@@ -20,6 +20,6 @@
     "padded-blocks": 0
   },
   "plugins": [
-    "react"
+    //"react"
   ]
 }
