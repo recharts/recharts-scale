@@ -1,38 +1,11 @@
 /**
  * @fileOverview calculate tick values of scale
- * @author xile611
- * @modified by arcthur
- * @date 2015-08-26
+ * @author xile611, arcthur
+ * @date 2015-09-17
  */
 
 import R from 'ramda';
-
-/**
- * 判断数据是否为浮点类型
- *
- * @param {Number} num 输入值
- * @return {Boolean} 是否是浮点类型
- */
-function isFloat(num) {
-  return /^([+-]?)\d*\.\d+$/.test(num);
-}
-
-/**
- * 获取数值的位数
- * 其中绝对值属于区间[0.1, 1)， 得到的值为0
- * 绝对值属于区间[0.01, 0.1)，得到的位数为 -1
- * 绝对值属于区间[0.001, 0.01)，得到的位数为 -2
- *
- * @param  {Number} value 数值
- * @return {Integer} 位数
- */
-function getDigitCount(value) {
-  if (value === 0) {
-    return 1;
-  }
-
-  return Math.floor(Math.log(Math.abs(value)) / Math.log(10)) + 1;
-}
+import Arithmetic from '../util/arithmetic';
 
 /**
  * 判断是否为合法的区间，并返回处理后的合法区间
@@ -62,16 +35,14 @@ function getValidInterval([min, max]) {
 function getFormatStep(roughStep, amendIndex) {
   if (roughStep <= 0) { return 0; }
 
-  const digitCount = getDigitCount(roughStep);
+  const digitCount = Arithmetic.getDigitCount(roughStep);
   // 间隔数与上一个数量级的占比
   const stepRatio = roughStep / Math.pow(10, digitCount);
 
-  const amendStepRatio = (Math.ceil(stepRatio / 0.05) + amendIndex) * 0.05;
+  // 整数与浮点数相乘，需要处理JS精度问题
+  const amendStepRatio = Arithmetic.multiply(Math.ceil(stepRatio / 0.05) + amendIndex, 0.05);
 
-  // 处理JS精度问题
-  const fixAmendStepRatio = Math.round(amendStepRatio * 100) / 100;
-
-  const formatStep = fixAmendStepRatio * Math.pow(10, digitCount);
+  const formatStep = Arithmetic.multiply(amendStepRatio, Math.pow(10, digitCount));
 
   return formatStep;
 }
@@ -84,29 +55,33 @@ function getFormatStep(roughStep, amendIndex) {
  * @return {Array}   刻度组
  */
 function getTickOfSingleValue(value, tickCount) {
-  const isFlt = isFloat(value);
+  const isFlt = Arithmetic.isFloat(value);
   let step = 1;
-  let start = value;
+  // 计算刻度的一个中间值
+  let middle = value;
 
   if (isFlt) {
     const absVal = Math.abs(value);
 
     if (absVal < 1) {
-      step = Math.pow(10, getDigitCount(value) - 1);
-      start = Math.floor(value / step) * step;
+      // 小于1的浮点数，刻度的间隔也计算得到一个浮点数
+      step = Math.pow(10, Arithmetic.getDigitCount(value) - 1);
+
+      middle = Arithmetic.multiply(Math.floor(value / step), step);
     } else if (absVal > 1) {
-      start = Math.floor(value);
+      // 大于1的浮点数，向下取最接近的整数作为一个刻度
+      middle = Math.floor(value);
     }
   }
 
   const middleIndex = Math.floor((tickCount - 1) / 2);
 
-  const f = R.compose(
-    R.map(n => { return start + (n - middleIndex) * step; }),
+  const fn = R.compose(
+    R.map(n => { return Arithmetic.sum(middle, Arithmetic.multiply(n - middleIndex, step)); }),
     R.range
   );
 
-  return f(0, tickCount);
+  return fn(0, tickCount);
 }
 
 /**
@@ -121,18 +96,19 @@ function getTickOfSingleValue(value, tickCount) {
 function calculateStep(min, max, tickCount, amendIndex = 0) {
   // 获取间隔步长
   const step = getFormatStep((max - min) / (tickCount - 1), amendIndex);
-  let start;
+  // 计算刻度的一个中间值
+  let middle;
 
   // 当0属于取值范围时
   if (min <= 0 && max >= 0) {
-    start = 0;
+    middle = 0;
   } else {
-    start = (min + max) / 2;
-    start = start - start % step;
+    middle = (min + max) / 2;
+    middle = middle - middle % step;
   }
 
-  let belowCount = Math.ceil((start - min) / step);
-  let upCount =  Math.ceil((max - start) / step);
+  let belowCount = Math.ceil((middle - min) / step);
+  let upCount =  Math.ceil((max - middle) / step);
   const scaleCount = belowCount + upCount + 1;
 
   if (scaleCount > tickCount) {
@@ -146,12 +122,10 @@ function calculateStep(min, max, tickCount, amendIndex = 0) {
 
   return {
     step: step,
-    tickMin: start - belowCount * step,
-    tickMax: start + upCount * step,
+    tickMin: Arithmetic.minus(middle, Arithmetic.multiply(belowCount, step)),
+    tickMax: Arithmetic.sum(middle, Arithmetic.multiply(upCount, step)),
   };
 }
-
-
 /**
  * 获取刻度
  *
@@ -160,10 +134,10 @@ function calculateStep(min, max, tickCount, amendIndex = 0) {
  * @param  {Integer} tickCount  刻度数
  * @return {Array}   取刻度数组
  */
-function getTickValues(min, max, tickCount = 6) {
+function getTickValues([min, max], tickCount = 6) {
   // 刻度的数量不能小于1
-  const count = tickCount < 2 ? 2 : tickCount;
-  const [cormin, cormax] = getValidInterval([min, max], count);
+  const count = Math.max(tickCount, 2);
+  const [cormin, cormax] = getValidInterval([min, max]);
 
   if (cormin === cormax) {
     return getTickOfSingleValue(cormin, tickCount);
@@ -172,23 +146,9 @@ function getTickValues(min, max, tickCount = 6) {
   // 获取间隔步长
   const {step, tickMin, tickMax} = calculateStep(cormin, cormax, count);
 
-  let fixlen = 0;
+  const values = Arithmetic.rangeStep(tickMin, tickMax + 0.1 * step, step);
 
-  if (isFloat(step)) {
-    const stepstr = (step + '');
-
-    if (stepstr.indexOf('.') > -1) {
-      fixlen = stepstr.split('.')[1].length > 4 ? 4 : stepstr.split('.')[1].length;
-    }
-  }
-
-  const f = R.compose(
-    R.map((n) => { return +(parseFloat(n).toFixed(fixlen)); }),
-    R.filter((n) => { return n % step === 0; }),
-    R.range
-  );
-
-  return f(tickMin, tickMax + 1);
+  return min > max ? R.reverse(values) : values;
 }
 
 export default R.memoize(getTickValues);
