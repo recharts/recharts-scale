@@ -1,7 +1,7 @@
 import R from 'ramda';
 import getNiceTickValues from './getNiceTickValues';
 import getTickValues from './getTickValues';
-import Arithmetric from '../util/arithmetric';
+import Arithmetic from '../util/arithmetic';
 /**
  * 线性映射
  *
@@ -36,7 +36,7 @@ function toNumber(a) {
  * @param {Number}  tickCount  刻度数
  * @return {Number}   输出值
  */
-function linear(domain = [0, 1], range = [0, 1], interpolate = interpolateNumber, isTruncate = false) {
+function linear(domain = [0, 1], range = [0, 1], interpolate = Arithmetic.interpolateNumber, isTruncate = false) {
   let output;
   let input;
   let tickValues;
@@ -46,13 +46,13 @@ function linear(domain = [0, 1], range = [0, 1], interpolate = interpolateNumber
   }
 
   function rescale() {
-    const inputFn = isTruncate ? uninterpolateTruncation : uninterpolateNumber;
+    const inputFn = isTruncate ? uninterpolateTruncation : Arithmetic.uninterpolateNumber;
 
     // 根据输入值，获取输出值
     output = scaleLinear(domain, range, inputFn, interpolate);
 
     // 根据输出值，反过来得到输入值
-    input = scaleLinear(range, domain, inputFn, interpolateNumber);
+    input = scaleLinear(range, domain, inputFn, Arithmetic.interpolateNumber);
 
     return scale;
   }
