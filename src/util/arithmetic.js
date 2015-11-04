@@ -113,7 +113,7 @@ function divide(a, b) {
  */
 function rangeStep(start, end, step) {
   let num = start;
-  let result = [];
+  const result = [];
 
   while (num < end) {
     result.push(num);

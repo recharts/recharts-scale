@@ -1,7 +1,7 @@
-import linear from './linear/index';
-import ordinal from './ordinal/index';
+import getTickValues from './getTickValues';
+import getNiceTickValues from './getNiceTickValues';
 
 export default {
-  linear,
-  ordinal,
+  getTickValues,
+  getNiceTickValues,
 };
