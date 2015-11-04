@@ -1,3 +1,7 @@
+0.1.2-beta / 2015-11-04
+==================
+  * fix: add main entry of project
+
 0.1.1-beta / 2015-11-04
 ==================
   * refactor: remove unneed linea && ordinal scale function
