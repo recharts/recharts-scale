@@ -1,6 +1,6 @@
 import getNiceTickValues from './getNiceTickValues';
 
-function getTickValues(domain, tickCount) {
+function getTickValues (domain, tickCount) {
   if (domain[0] === domain[1]) {
     return getNiceTickValues(domain, tickCount);
   }
