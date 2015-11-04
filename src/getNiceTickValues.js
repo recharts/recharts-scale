@@ -5,7 +5,7 @@
  */
 
 import R from 'ramda';
-import Arithmetic from '../util/arithmetic';
+import Arithmetic from './util/arithmetic';
 
 /**
  * 判断是否为合法的区间，并返回处理后的合法区间

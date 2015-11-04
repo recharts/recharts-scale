@@ -1,4 +1,4 @@
-import getNiceTickValues from '../../src/linear/getNiceTickValues';
+import getNiceTickValues from '../../src/getNiceTickValues';
 import {expect} from 'chai';
 
 describe('getNiceTickValues of equal values', () => {
