@@ -108,7 +108,7 @@ function calculateStep(min, max, tickCount, amendIndex = 0) {
   }
 
   let belowCount = Math.ceil((middle - min) / step);
-  let upCount =  Math.ceil((max - middle) / step);
+  let upCount = Math.ceil((max - middle) / step);
   const scaleCount = belowCount + upCount + 1;
 
   if (scaleCount > tickCount) {
@@ -121,7 +121,7 @@ function calculateStep(min, max, tickCount, amendIndex = 0) {
   }
 
   return {
-    step: step,
+    step,
     tickMin: Arithmetic.minus(middle, Arithmetic.multiply(belowCount, step)),
     tickMax: Arithmetic.sum(middle, Arithmetic.multiply(upCount, step)),
   };
@@ -144,7 +144,7 @@ function getTickValues([min, max], tickCount = 6) {
   }
 
   // 获取间隔步长
-  const {step, tickMin, tickMax} = calculateStep(cormin, cormax, count);
+  const { step, tickMin, tickMax } = calculateStep(cormin, cormax, count);
 
   const values = Arithmetic.rangeStep(tickMin, tickMax + 0.1 * step, step);
 

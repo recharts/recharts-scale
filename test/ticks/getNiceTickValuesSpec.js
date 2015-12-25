@@ -1,5 +1,5 @@
 import getNiceTickValues from '../../src/getNiceTickValues';
-import {expect} from 'chai';
+import { expect } from 'chai';
 
 describe('getNiceTickValues of equal values', () => {
   describe('of positive integer has odd tick count', () => {
