@@ -132,10 +132,10 @@ function rangeStep(start, end, step) {
  * @return {Number}    定义域内的某个值
  */
 const interpolateNumber = R.curry((a, b, t) => {
-  a = +a;
-  b = +b;
+  const newA = +a;
+  const newB = +b;
 
-  return a + t * (b - a);
+  return newA + t * (newB - newA);
 });
 /**
  * 线性插值的逆运算

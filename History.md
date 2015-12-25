@@ -1,3 +1,7 @@
+0.1.3-beta / 2015-12-25
+==================
+  * deps: update dependencies
+
 0.1.2-beta / 2015-11-04
 ==================
   * fix: add main entry of project
