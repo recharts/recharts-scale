@@ -1,3 +1,7 @@
+0.1.4-beta / 2015-12-25
+==================
+  * fix: fix bug of babel-6 export
+
 0.1.3-beta / 2015-12-25
 ==================
   * deps: update dependencies
