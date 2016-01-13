@@ -63,7 +63,7 @@ function sum(a, b) {
 
   count = Math.pow(10, count);
 
-  return (a * count + b * count) / count;
+  return (multiply(a, count) + multiply(b, count)) / count;
 }
 /**
  * 减法运算，解决了js运算的精度问题

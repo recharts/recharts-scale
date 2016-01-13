@@ -1,3 +1,7 @@
+0.1.5-beta / 2016-01-13
+==================
+  * fix: fix bug of rangeStep in arithmetic
+
 0.1.4-beta / 2015-12-25
 ==================
   * fix: fix bug of babel-6 export
