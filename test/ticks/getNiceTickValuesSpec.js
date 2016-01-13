@@ -179,4 +179,14 @@ describe('getNiceTickValues of unequal values', () => {
     });
 
   });
+
+  describe('of float', () => {
+    const [min, max, count] = [-4.10389, 0.59414, 7];
+    const scales = getNiceTickValues([min, max], count);
+
+    it('should return scales of [-4.25, -3.4, -2.55, -1.7, -0.85, 0, 0.85]', () => {
+      expect(scales).to.eql([-4.25, -3.4, -2.55, -1.7, -0.85, 0, 0.85]);
+    });
+
+  });
 });
