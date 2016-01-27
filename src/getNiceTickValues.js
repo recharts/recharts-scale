@@ -4,7 +4,7 @@
  * @date 2015-09-17
  */
 
-import R from 'ramda';
+import { compose, range, memoize, map, reverse } from './util/utils';
 import Arithmetic from './util/arithmetic';
 
 /**
@@ -76,9 +76,9 @@ function getTickOfSingleValue(value, tickCount) {
 
   const middleIndex = Math.floor((tickCount - 1) / 2);
 
-  const fn = R.compose(
-    R.map(n => { return Arithmetic.sum(middle, Arithmetic.multiply(n - middleIndex, step)); }),
-    R.range
+  const fn = compose(
+    map(n => { return Arithmetic.sum(middle, Arithmetic.multiply(n - middleIndex, step)); }),
+    range
   );
 
   return fn(0, tickCount);
@@ -108,7 +108,7 @@ function calculateStep(min, max, tickCount, amendIndex = 0) {
   }
 
   let belowCount = Math.ceil((middle - min) / step);
-  let upCount =  Math.ceil((max - middle) / step);
+  let upCount = Math.ceil((max - middle) / step);
   const scaleCount = belowCount + upCount + 1;
 
   if (scaleCount > tickCount) {
@@ -121,7 +121,7 @@ function calculateStep(min, max, tickCount, amendIndex = 0) {
   }
 
   return {
-    step: step,
+    step,
     tickMin: Arithmetic.minus(middle, Arithmetic.multiply(belowCount, step)),
     tickMax: Arithmetic.sum(middle, Arithmetic.multiply(upCount, step)),
   };
@@ -144,11 +144,11 @@ function getTickValues([min, max], tickCount = 6) {
   }
 
   // 获取间隔步长
-  const {step, tickMin, tickMax} = calculateStep(cormin, cormax, count);
+  const { step, tickMin, tickMax } = calculateStep(cormin, cormax, count);
 
   const values = Arithmetic.rangeStep(tickMin, tickMax + 0.1 * step, step);
 
-  return min > max ? R.reverse(values) : values;
+  return min > max ? reverse(values) : values;
 }
 
-export default R.memoize(getTickValues);
+export default memoize(getTickValues);
