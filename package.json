@@ -1,6 +1,6 @@
 {
   "name": "recharts-scale",
-  "version": "0.1.5-beta",
+  "version": "0.1.6-beta",
   "description": "Scale of Cartesian Coordinates",
   "main": "index.js",
   "keywords": [
@@ -34,8 +34,5 @@
     "test-cov": "./node_modules/.bin/isparta cover node_modules/.bin/_mocha  --report html --report text --  --require babel-register",
     "lint": "./node_modules/.bin/eslint src test"
   },
-  "license": "MIT",
-  "dependencies": {
-    "ramda": "0.19.0"
-  }
+  "license": "MIT"
 }

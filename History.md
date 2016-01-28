@@ -1,3 +1,7 @@
+0.1.6-beta / 2016-01-28
+==================
+  * fix: remove ramda
+
 0.1.5-beta / 2016-01-13
 ==================
   * fix: fix bug of rangeStep in arithmetic
