@@ -4,7 +4,7 @@
  * @date 2015-09-17
  */
 
-import R from 'ramda';
+import { compose, range, memoize, map, reverse } from './util/utils';
 import Arithmetic from './util/arithmetic';
 
 /**
@@ -76,9 +76,9 @@ function getTickOfSingleValue(value, tickCount) {
 
   const middleIndex = Math.floor((tickCount - 1) / 2);
 
-  const fn = R.compose(
-    R.map(n => { return Arithmetic.sum(middle, Arithmetic.multiply(n - middleIndex, step)); }),
-    R.range
+  const fn = compose(
+    map(n => { return Arithmetic.sum(middle, Arithmetic.multiply(n - middleIndex, step)); }),
+    range
   );
 
   return fn(0, tickCount);
@@ -148,7 +148,7 @@ function getTickValues([min, max], tickCount = 6) {
 
   const values = Arithmetic.rangeStep(tickMin, tickMax + 0.1 * step, step);
 
-  return min > max ? R.reverse(values) : values;
+  return min > max ? reverse(values) : values;
 }
 
-export default R.memoize(getTickValues);
+export default memoize(getTickValues);

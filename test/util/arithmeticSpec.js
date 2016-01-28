@@ -111,25 +111,19 @@ describe('rangeStep', () => {
 describe('isFloat', () => {
   describe('of integer', () => {
     it('should return false', () => {
-      const result = Arithmetic.isFloat(2);
-
-      expect(result).to.be.false;
+      expect(Arithmetic.isFloat(2)).to.be.false;
     });
   });
 
   describe('of float integer', () => {
     it('should return false', () => {
-      const result = Arithmetic.isFloat(2.000);
-
-      expect(result).to.be.false;
+      expect(Arithmetic.isFloat(2.000)).to.be.false;
     });
   });
 
   describe('of float', () => {
     it('should return true', () => {
-      const result = Arithmetic.isFloat(0.01);
-
-      expect(result).to.be.true;
+      expect(Arithmetic.isFloat(0.01)).to.be.true;
     });
   });
 
