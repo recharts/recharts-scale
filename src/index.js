@@ -5,3 +5,5 @@ export default {
   getTickValues,
   getNiceTickValues,
 };
+
+export { getTickValues, getNiceTickValues };
