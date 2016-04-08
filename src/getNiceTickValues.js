@@ -72,6 +72,8 @@ function getTickOfSingleValue(value, tickCount) {
       // 大于1的浮点数，向下取最接近的整数作为一个刻度
       middle = Math.floor(value);
     }
+  } else if (value === 0) {
+    middle = Math.floor((tickCount - 1) / 2);
   }
 
   const middleIndex = Math.floor((tickCount - 1) / 2);

@@ -42,8 +42,8 @@ describe('getNiceTickValues of equal values', () => {
     const [min, max, count] = [0, 0, 5];
     const scales = getNiceTickValues([min, max], count);
 
-    it('should return scales of [-2, -1, 0, 1, 2]', () => {
-      expect(scales).to.eql([-2, -1, 0, 1, 2]);
+    it('should return scales of [0, 1, 2, 3, 4]', () => {
+      expect(scales).to.eql([0, 1, 2, 3, 4]);
     });
 
   });
@@ -52,8 +52,8 @@ describe('getNiceTickValues of equal values', () => {
     const [min, max, count] = [0, 0, 4];
     const scales = getNiceTickValues([min, max], count);
 
-    it('should return scales of [-1, 0, 1, 2]', () => {
-      expect(scales).to.eql([-1, 0, 1, 2]);
+    it('should return scales of [0, 1, 2, 3]', () => {
+      expect(scales).to.eql([0, 1, 2, 3]);
     });
 
   });
