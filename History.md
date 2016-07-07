@@ -1,3 +1,7 @@
+0.1.10 / 2016-07-07
+==================
+  * deps: update deps and fix lint error
+
 0.1.9 / 2016-04-08
 ==================
   * fix: fix all zeros ticks

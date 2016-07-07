@@ -110,21 +110,15 @@ describe('rangeStep', () => {
 
 describe('isFloat', () => {
   describe('of integer', () => {
-    it('should return false', () => {
-      expect(Arithmetic.isFloat(2)).to.be.false;
-    });
+    it('should return false', () => expect(Arithmetic.isFloat(2)).to.be.false);
   });
 
   describe('of float integer', () => {
-    it('should return false', () => {
-      expect(Arithmetic.isFloat(2.000)).to.be.false;
-    });
+    it('should return false', () => expect(Arithmetic.isFloat(2.000)).to.be.false);
   });
 
   describe('of float', () => {
-    it('should return true', () => {
-      expect(Arithmetic.isFloat(0.01)).to.be.true;
-    });
+    it('should return true', () => expect(Arithmetic.isFloat(0.01)).to.be.true);
   });
 
 });

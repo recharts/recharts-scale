@@ -79,7 +79,7 @@ function getTickOfSingleValue(value, tickCount) {
   const middleIndex = Math.floor((tickCount - 1) / 2);
 
   const fn = compose(
-    map(n => { return Arithmetic.sum(middle, Arithmetic.multiply(n - middleIndex, step)); }),
+    map(n => Arithmetic.sum(middle, Arithmetic.multiply(n - middleIndex, step))),
     range
   );
 
@@ -131,8 +131,7 @@ function calculateStep(min, max, tickCount, amendIndex = 0) {
 /**
  * 获取刻度
  *
- * @param  {Number}  min        最小值
- * @param  {Number}  max        最大值
+ * @param  {Number}  min, max   min: 最小值, max: 最大值
  * @param  {Integer} tickCount  刻度数
  * @return {Array}   取刻度数组
  */
