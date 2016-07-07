@@ -6,16 +6,16 @@ function getTickValues(domain, tickCount) {
     return getNiceTickValues(domain, tickCount);
   }
 
-  tickCount = Math.max(tickCount, 2);
+  const count = Math.max(tickCount, 2);
 
-  const step = (domain[1] - domain[0]) / (tickCount - 1);
+  const step = (domain[1] - domain[0]) / (count - 1);
 
   const fn = compose(
     map(n => (domain[0] + n * step)),
     range
   );
 
-  return fn(0, tickCount);
+  return fn(0, count);
 }
 
 export default getTickValues;

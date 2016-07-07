@@ -1,19 +1,17 @@
 const identity = i => i;
 
-export const __ = {
+export const PLACE_HOLDER = {
   '@@functional/placeholder': true,
 };
 
-const isPlaceHolder = val => val === __;
+const isPlaceHolder = val => val === PLACE_HOLDER;
 
-const _curry0 = (fn) => {
-  return function _curried(...args) {
-    if (args.length === 0 || args.length === 1 && isPlaceHolder(args[0])) {
-      return _curried;
-    }
+const curry0 = (fn) => function _curried(...args) {
+  if (args.length === 0 || args.length === 1 && isPlaceHolder(args[0])) {
+    return _curried;
+  }
 
-    return fn(...args);
-  };
+  return fn(...args);
 };
 
 const curryN = (n, fn) => {
@@ -21,26 +19,22 @@ const curryN = (n, fn) => {
     return fn;
   }
 
-  return _curry0((...args) => {
-    const argsLength = args.filter(arg => arg !== __).length;
+  return curry0((...args) => {
+    const argsLength = args.filter(arg => arg !== PLACE_HOLDER).length;
 
     if (argsLength >= n) {
       return fn(...args);
     }
 
-    return curryN(n - argsLength, _curry0((...restArgs) => {
-      const newArgs = args.map(arg =>
-        isPlaceHolder(arg) ? restArgs.shift() : arg
-      );
+    return curryN(n - argsLength, curry0((...restArgs) => {
+      const newArgs = args.map(arg => (isPlaceHolder(arg) ? restArgs.shift() : arg));
 
       return fn(...newArgs, ...restArgs);
     }));
   });
 };
 
-export const curry = fn => {
-  return curryN(fn.length, fn);
-};
+export const curry = fn => curryN(fn.length, fn);
 
 export const range = (begin, end) => {
   const arr = [];

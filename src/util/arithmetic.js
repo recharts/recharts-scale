@@ -33,7 +33,7 @@ function getDigitCount(value) {
   } else if (abs < 1) {
     result = Math.floor(Math.log(abs) / Math.log(10)) + 1;
   } else {
-    const str = '' + value;
+    const str = `${value}`;
     const ary = str.split('.');
 
     result = ary[0].length;
@@ -47,10 +47,23 @@ function getDigitCount(value) {
  * @return {Integer}   位数
  */
 function getDecimalDigitCount(a) {
-  const str = a ? '' + a : '';
+  const str = a ? `${a}` : '';
   const ary = str.split('.');
 
   return ary.length > 1 ? ary[1].length : 0;
+}
+/**
+ * 乘法运算，解决了js运算的精度问题
+ * @param  {Number} a 被乘数
+ * @param  {Number} b 乘数
+ * @return {Number}   积
+ */
+function multiply(a, b) {
+  const intA = parseInt((`${a}`).replace('.', ''), 10);
+  const intB = parseInt((`${b}`).replace('.', ''), 10);
+  const count = getDecimalDigitCount(a) + getDecimalDigitCount(b);
+
+  return (intA * intB) / Math.pow(10, count);
 }
 /**
  * 加法运算，解决了js运算的精度问题
@@ -75,19 +88,6 @@ function minus(a, b) {
   return sum(a, -b);
 }
 /**
- * 乘法运算，解决了js运算的精度问题
- * @param  {Number} a 被乘数
- * @param  {Number} b 乘数
- * @return {Number}   积
- */
-function multiply(a, b) {
-  const intA = parseInt(('' + a).replace('.', ''), 10);
-  const intB = parseInt(('' + b).replace('.', ''), 10);
-  const count = getDecimalDigitCount(a) + getDecimalDigitCount(b);
-
-  return (intA * intB) / Math.pow(10, count);
-}
-/**
  * 除法运算，解决了js运算的精度问题
  * @param  {Number} a 被除数
  * @param  {Number} b 除数
@@ -96,8 +96,8 @@ function multiply(a, b) {
 function divide(a, b) {
   const ca = getDecimalDigitCount(a);
   const cb = getDecimalDigitCount(b);
-  const intA = parseInt(('' + a).replace('.', ''), 10);
-  const intB = parseInt(('' + b).replace('.', ''), 10);
+  const intA = parseInt((`${a}`).replace('.', ''), 10);
+  const intB = parseInt((`${b}`).replace('.', ''), 10);
 
   return (intA / intB) * Math.pow(10, cb - ca);
 }
@@ -148,7 +148,7 @@ const interpolateNumber = curry((a, b, t) => {
 const uninterpolateNumber = curry((a, b, x) => {
   let diff = b - (+a);
 
-  diff = diff ? diff : Infinity;
+  diff = diff || Infinity;
 
   return (x - a) / diff;
 });
@@ -164,7 +164,7 @@ const uninterpolateNumber = curry((a, b, x) => {
 const uninterpolateTruncation = curry((a, b, x) => {
   let diff = b - (+a);
 
-  diff = diff ? diff : Infinity;
+  diff = diff || Infinity;
 
   return Math.max(0, Math.min(1, (x - a) / diff));
 });
