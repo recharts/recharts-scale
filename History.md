@@ -1,3 +1,7 @@
+0.1.11 / 2016-07-19
+==================
+  * fix: Tweak the strategy of calculating step of ticks
+
 0.1.10 / 2016-07-07
 ==================
   * deps: update deps and fix lint error
