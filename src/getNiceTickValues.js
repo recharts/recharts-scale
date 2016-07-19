@@ -8,16 +8,16 @@ import { compose, range, memoize, map, reverse } from './util/utils';
 import Arithmetic from './util/arithmetic';
 
 /**
- * 判断是否为合法的区间，并返回处理后的合法区间
+ * Calculate a interval of a minimum value and a maximum value
  *
- * @param  {Number} min       最小值
- * @param  {Number} max       最大值
- * @return {Array} 最小最大值数组
+ * @param  {Number} min       The minimum value
+ * @param  {Number} max       The maximum value
+ * @return {Array} An interval
  */
 function getValidInterval([min, max]) {
   let [validMin, validMax] = [min, max];
 
-  // 交换最大值和最小值
+  // exchange
   if (min > max) {
     [validMin, validMax] = [max, min];
   }
@@ -26,21 +26,24 @@ function getValidInterval([min, max]) {
 }
 
 /**
- * 计算可读性高的刻度间距，如 10, 20
+ * Calculate the step which is easy to understand between ticks, like 10, 20, 25
  *
- * @param  {Number}  roughStep 计算的原始间隔
- * @param  {Integer} amendIndex 修正系数
- * @return {Number}  刻度间距
+ * @param  {Number}  roughStep        The rough step calculated by deviding the
+ * difference by the tickCount
+ * @param  {Integer} correctionFactor A correction factor
+ * @return {Number}  The step which is easy to understand between two ticks
  */
-function getFormatStep(roughStep, amendIndex) {
+function getFormatStep(roughStep, correctionFactor) {
   if (roughStep <= 0) { return 0; }
 
   const digitCount = Arithmetic.getDigitCount(roughStep);
-  // 间隔数与上一个数量级的占比
+  // The ratio between the rough step and the smallest number which has a bigger
+  // order of magnitudes than the rough step
   const stepRatio = roughStep / Math.pow(10, digitCount);
-
-  // 整数与浮点数相乘，需要处理JS精度问题
-  const amendStepRatio = Arithmetic.multiply(Math.ceil(stepRatio / 0.05) + amendIndex, 0.05);
+  // When an integer and a float multiplied, the accuracy of result may be wrong
+  const amendStepRatio = digitCount >= 2 ?
+    Arithmetic.multiply(Math.ceil(stepRatio / 0.05) + correctionFactor, 0.05) :
+    Arithmetic.multiply(Math.ceil(stepRatio / 0.1) + correctionFactor, 0.1);
 
   const formatStep = Arithmetic.multiply(amendStepRatio, Math.pow(10, digitCount));
 
@@ -48,28 +51,28 @@ function getFormatStep(roughStep, amendIndex) {
 }
 
 /**
- * 获取最大值和最小值相等的区间的刻度
+ * calculate the ticks when the minimum value equals to the maximum value
  *
- * @param  {Number}  value     最大值也是最小值
- * @param  {Integer} tickCount 刻度数
- * @return {Array}   刻度组
+ * @param  {Number}  value     The minimum valuue which is also the maximum value
+ * @param  {Integer} tickCount The count of ticks
+ * @return {Array}             ticks
  */
 function getTickOfSingleValue(value, tickCount) {
   const isFlt = Arithmetic.isFloat(value);
   let step = 1;
-  // 计算刻度的一个中间值
+  // calculate the middle value of ticks
   let middle = value;
 
   if (isFlt) {
     const absVal = Math.abs(value);
 
     if (absVal < 1) {
-      // 小于1的浮点数，刻度的间隔也计算得到一个浮点数
+      // The step should be a float number when the difference is smaller than 1
       step = Math.pow(10, Arithmetic.getDigitCount(value) - 1);
 
       middle = Arithmetic.multiply(Math.floor(value / step), step);
     } else if (absVal > 1) {
-      // 大于1的浮点数，向下取最接近的整数作为一个刻度
+      // Return the maximum integer which is smaller than 'value' when 'value' is greater than 1
       middle = Math.floor(value);
     }
   } else if (value === 0) {
@@ -87,21 +90,21 @@ function getTickOfSingleValue(value, tickCount) {
 }
 
 /**
- * 计算步长
+ * Calculate the step
  *
- * @param  {Number}  min        最小值
- * @param  {Number}  max        最大值
- * @param  {Integer} tickCount  刻度数
- * @param  {Number}  amendIndex 修正系数
- * @return {Object}  步长相关对象
+ * @param  {Number}  min        The minimum value of an interval
+ * @param  {Number}  max        The maximum value of an interval
+ * @param  {Integer} tickCount  The count of ticks
+ * @param  {Number}  correctionFactor A correction factor
+ * @return {Object}  The step, minimum value of ticks, maximum value of ticks
  */
-function calculateStep(min, max, tickCount, amendIndex = 0) {
-  // 获取间隔步长
-  const step = getFormatStep((max - min) / (tickCount - 1), amendIndex);
-  // 计算刻度的一个中间值
+function calculateStep(min, max, tickCount, correctionFactor = 0) {
+  // The step which is easy to understand between two ticks
+  const step = getFormatStep((max - min) / (tickCount - 1), correctionFactor);
+  // A medial value of ticks
   let middle;
 
-  // 当0属于取值范围时
+  // When 0 is inside the interval, 0 should be a tick
   if (min <= 0 && max >= 0) {
     middle = 0;
   } else {
@@ -114,10 +117,10 @@ function calculateStep(min, max, tickCount, amendIndex = 0) {
   const scaleCount = belowCount + upCount + 1;
 
   if (scaleCount > tickCount) {
-    // 当计算得到的刻度数大于需要的刻度数时，将步长修正的大一些
-    return calculateStep(min, max, tickCount, amendIndex + 1);
+    // When more ticks need to cover the interval, step should be bigger.
+    return calculateStep(min, max, tickCount, correctionFactor + 1);
   } else if (scaleCount < tickCount) {
-    // 当计算得到的刻度数小于需要的刻度数时，人工的增加一些刻度
+    // When less ticks can cover the interval, we should add some additional ticks
     upCount = max > 0 ? upCount + (tickCount - scaleCount) : upCount;
     belowCount = max > 0 ? belowCount : belowCount + (tickCount - scaleCount);
   }
@@ -129,14 +132,14 @@ function calculateStep(min, max, tickCount, amendIndex = 0) {
   };
 }
 /**
- * 获取刻度
+ * Calculate the ticks of an interval
  *
- * @param  {Number}  min, max   min: 最小值, max: 最大值
- * @param  {Integer} tickCount  刻度数
- * @return {Array}   取刻度数组
+ * @param  {Number}  min, max   min: The minimum value, max: The maximum value
+ * @param  {Integer} tickCount  The count of ticks
+ * @return {Array}   ticks
  */
 function getTickValues([min, max], tickCount = 6) {
-  // 刻度的数量不能小于1
+  // More than two ticks should be return
   const count = Math.max(tickCount, 2);
   const [cormin, cormax] = getValidInterval([min, max]);
 
@@ -144,7 +147,7 @@ function getTickValues([min, max], tickCount = 6) {
     return getTickOfSingleValue(cormin, tickCount);
   }
 
-  // 获取间隔步长
+  // Get the step between two ticks
   const { step, tickMin, tickMax } = calculateStep(cormin, cormax, count);
 
   const values = Arithmetic.rangeStep(tickMin, tickMax + 0.1 * step, step);
