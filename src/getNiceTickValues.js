@@ -30,10 +30,11 @@ function getValidInterval([min, max]) {
  *
  * @param  {Number}  roughStep        The rough step calculated by deviding the
  * difference by the tickCount
+ * @param  {Boolean} allowDecimals    Allow the ticks to be decimals or not
  * @param  {Integer} correctionFactor A correction factor
  * @return {Number}  The step which is easy to understand between two ticks
  */
-function getFormatStep(roughStep, correctionFactor) {
+function getFormatStep(roughStep, allowDecimals, correctionFactor) {
   if (roughStep <= 0) { return 0; }
 
   const digitCount = Arithmetic.getDigitCount(roughStep);
@@ -47,23 +48,24 @@ function getFormatStep(roughStep, correctionFactor) {
 
   const formatStep = Arithmetic.multiply(amendStepRatio, Math.pow(10, digitCount));
 
-  return formatStep;
+  return allowDecimals ? formatStep : Math.ceil(formatStep);
 }
 
 /**
  * calculate the ticks when the minimum value equals to the maximum value
  *
- * @param  {Number}  value     The minimum valuue which is also the maximum value
- * @param  {Integer} tickCount The count of ticks
- * @return {Array}             ticks
+ * @param  {Number}  value         The minimum valuue which is also the maximum value
+ * @param  {Integer} tickCount     The count of ticks
+ * @param  {Boolean} allowDecimals Allow the ticks to be decimals or not
+ * @return {Array}                 ticks
  */
-function getTickOfSingleValue(value, tickCount) {
+function getTickOfSingleValue(value, tickCount, allowDecimals) {
   const isFlt = Arithmetic.isFloat(value);
   let step = 1;
   // calculate the middle value of ticks
   let middle = value;
 
-  if (isFlt) {
+  if (isFlt && allowDecimals) {
     const absVal = Math.abs(value);
 
     if (absVal < 1) {
@@ -77,6 +79,8 @@ function getTickOfSingleValue(value, tickCount) {
     }
   } else if (value === 0) {
     middle = Math.floor((tickCount - 1) / 2);
+  } else if (!allowDecimals) {
+    middle = Math.floor(value);
   }
 
   const middleIndex = Math.floor((tickCount - 1) / 2);
@@ -92,15 +96,16 @@ function getTickOfSingleValue(value, tickCount) {
 /**
  * Calculate the step
  *
- * @param  {Number}  min        The minimum value of an interval
- * @param  {Number}  max        The maximum value of an interval
- * @param  {Integer} tickCount  The count of ticks
+ * @param  {Number}  min              The minimum value of an interval
+ * @param  {Number}  max              The maximum value of an interval
+ * @param  {Integer} tickCount        The count of ticks
+ * @param  {Boolean} allowDecimals    Allow the ticks to be decimals or not
  * @param  {Number}  correctionFactor A correction factor
  * @return {Object}  The step, minimum value of ticks, maximum value of ticks
  */
-function calculateStep(min, max, tickCount, correctionFactor = 0) {
+function calculateStep(min, max, tickCount, allowDecimals, correctionFactor = 0) {
   // The step which is easy to understand between two ticks
-  const step = getFormatStep((max - min) / (tickCount - 1), correctionFactor);
+  const step = getFormatStep((max - min) / (tickCount - 1), allowDecimals, correctionFactor);
   // A medial value of ticks
   let middle;
 
@@ -118,7 +123,7 @@ function calculateStep(min, max, tickCount, correctionFactor = 0) {
 
   if (scaleCount > tickCount) {
     // When more ticks need to cover the interval, step should be bigger.
-    return calculateStep(min, max, tickCount, correctionFactor + 1);
+    return calculateStep(min, max, tickCount, allowDecimals, correctionFactor + 1);
   } else if (scaleCount < tickCount) {
     // When less ticks can cover the interval, we should add some additional ticks
     upCount = max > 0 ? upCount + (tickCount - scaleCount) : upCount;
@@ -134,25 +139,48 @@ function calculateStep(min, max, tickCount, correctionFactor = 0) {
 /**
  * Calculate the ticks of an interval
  *
- * @param  {Number}  min, max   min: The minimum value, max: The maximum value
- * @param  {Integer} tickCount  The count of ticks
+ * @param  {Number}  min, max      min: The minimum value, max: The maximum value
+ * @param  {Integer} tickCount     The count of ticks
+ * @param  {Boolean} allowDecimals Allow the ticks to be decimals or not
  * @return {Array}   ticks
  */
-function getTickValues([min, max], tickCount = 6) {
+function getNiceTickValuesFn([min, max], tickCount = 6, allowDecimals = true) {
   // More than two ticks should be return
   const count = Math.max(tickCount, 2);
   const [cormin, cormax] = getValidInterval([min, max]);
 
   if (cormin === cormax) {
-    return getTickOfSingleValue(cormin, tickCount);
+    return getTickOfSingleValue(cormin, tickCount, allowDecimals);
   }
 
   // Get the step between two ticks
-  const { step, tickMin, tickMax } = calculateStep(cormin, cormax, count);
+  const { step, tickMin, tickMax } = calculateStep(cormin, cormax, count, allowDecimals);
 
   const values = Arithmetic.rangeStep(tickMin, tickMax + 0.1 * step, step);
 
   return min > max ? reverse(values) : values;
 }
 
-export default memoize(getTickValues);
+function getTickValuesFn([min, max], tickCount = 6, allowDecimals = true) {
+  // More than two ticks should be return
+  const count = Math.max(tickCount, 2);
+  const [cormin, cormax] = getValidInterval([min, max]);
+
+  if (cormin === cormax) {
+    return getTickOfSingleValue(cormin, tickCount, allowDecimals);
+  }
+
+  const step = getFormatStep((cormax - cormin) / (count - 1), allowDecimals, 0);
+
+  const fn = compose(
+    map(n => (cormin + n * step)),
+    range
+  );
+
+  const values = fn(0, count).filter(entry => (entry >= cormin && entry <= cormax));
+
+  return min > max ? reverse(values) : values;
+}
+
+export const getNiceTickValues = memoize(getNiceTickValuesFn);
+export const getTickValues = memoize(getTickValuesFn);
