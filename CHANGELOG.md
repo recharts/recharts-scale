@@ -1,3 +1,9 @@
+## 0.2.1 (July 25, 2016)
+
+### fix
+
+- Fix the precision of ticks for decimals
+
 ## 0.2.0 (July 25, 2016)
 
 ### feat

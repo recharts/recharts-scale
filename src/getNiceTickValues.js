@@ -42,7 +42,7 @@ function getFormatStep(roughStep, allowDecimals, correctionFactor) {
   // order of magnitudes than the rough step
   const stepRatio = roughStep / Math.pow(10, digitCount);
   // When an integer and a float multiplied, the accuracy of result may be wrong
-  const amendStepRatio = digitCount >= 2 ?
+  const amendStepRatio = digitCount !== 1 ?
     Arithmetic.multiply(Math.ceil(stepRatio / 0.05) + correctionFactor, 0.05) :
     Arithmetic.multiply(Math.ceil(stepRatio / 0.1) + correctionFactor, 0.1);
 
