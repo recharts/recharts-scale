@@ -234,7 +234,18 @@ describe('getNiceTickValues of unequal values', () => {
     });
 
   });
+
+  describe('of integers [0, 1, 4]', () => {
+    const [min, max, count] = [0, 1, 5];
+    const scales = getNiceTickValues([min, max], count);
+
+    it('should return integers of [0, 0.25, 0.5, 0.75, 1]', () => {
+      expect(scales).to.eql([0, 0.25, 0.5, 0.75, 1]);
+    });
+
+  });
 });
+
 describe('getTickValues of unequal values', () => {
   describe('of positive integer', () => {
     const [min, max, count] = [1, 5, 5];
