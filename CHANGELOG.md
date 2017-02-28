@@ -1,3 +1,15 @@
+## 0.2.3 (Feb 28, 2017)
+
+### fix
+
+- Fix calculation precision of calculateStep, add Arithmetic.modulo
+
+## 0.2.2 (Feb 28, 2017)
+
+### fix
+
+- Fix calculation precision of calculateStep
+
 ## 0.2.1 (July 25, 2016)
 
 ### fix
