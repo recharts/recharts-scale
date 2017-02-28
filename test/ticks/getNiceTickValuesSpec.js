@@ -206,12 +206,22 @@ describe('getNiceTickValues of unequal values', () => {
 
   });
 
+  describe('of float [39.9156, 42.5401, 5]', () => {
+    const [min, max, count] = [39.9156, 42.5401, 5];
+    const scales = getNiceTickValues([min, max], count);
+
+    it('should return scales of [39.9, 40.6, 41.3, 42, 42.7]', () => {
+      expect(scales).to.eql([39.9, 40.6, 41.3, 42, 42.7]);
+    });
+
+  });
+
   describe('of float [-4.10389, 0.59414, 7]', () => {
     const [min, max, count] = [-4.10389, 0.59414, 7];
     const scales = getNiceTickValues([min, max], count);
 
-    it('should return scales of [-4.5, -3.6, -2.7, -1.8, -0.9, 0, 0.9]', () => {
-      expect(scales).to.eql([-4.5, -3.6, -2.7, -1.8, -0.9, 0, 0.9]);
+    it('should return scales of [-4.25, -3.4, -2.55, -1.7, -0.85, 0, 0.85]', () => {
+      expect(scales).to.eql([-4.25, -3.4, -2.55, -1.7, -0.85, 0, 0.85]);
     });
 
   });

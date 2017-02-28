@@ -113,8 +113,8 @@ function calculateStep(min, max, tickCount, allowDecimals, correctionFactor = 0)
   if (min <= 0 && max >= 0) {
     middle = 0;
   } else {
-    middle = (min + max) / 2;
-    middle = middle - middle % step;
+    middle = Arithmetic.divide(Arithmetic.sum(min, max), 2);
+    middle = Arithmetic.minus(middle, middle % step);
   }
 
   let belowCount = Math.ceil((middle - min) / step);
