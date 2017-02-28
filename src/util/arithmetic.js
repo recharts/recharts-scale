@@ -102,6 +102,16 @@ function divide(a, b) {
   return (intA / intB) * Math.pow(10, cb - ca);
 }
 
+function modulo(a, b) {
+  const mod = Math.abs(b);
+
+  if (b <= 0) { return a; }
+
+  const cnt = Math.floor(a / mod);
+
+  return minus(a, multiply(mod, cnt));
+}
+
 /**
  * 按照固定的步长获取[start, end)这个区间的数据
  * 并且需要处理js计算精度的问题
@@ -179,6 +189,7 @@ export default {
   minus,
   multiply,
   divide,
+  modulo,
 
   interpolateNumber,
   uninterpolateNumber,
