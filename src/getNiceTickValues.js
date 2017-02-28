@@ -114,7 +114,7 @@ function calculateStep(min, max, tickCount, allowDecimals, correctionFactor = 0)
     middle = 0;
   } else {
     middle = Arithmetic.divide(Arithmetic.sum(min, max), 2);
-    middle = Arithmetic.minus(middle, middle % step);
+    middle = Arithmetic.minus(middle, Arithmetic.modulo(middle, step));
   }
 
   let belowCount = Math.ceil((middle - min) / step);
