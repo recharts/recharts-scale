@@ -182,5 +182,20 @@ function getTickValuesFn([min, max], tickCount = 6, allowDecimals = true) {
   return min > max ? reverse(values) : values;
 }
 
+function getTickValuesFixedDomainFn([min, max], tickCount, allowDecimals = true) {
+  // More than two ticks should be return
+  const [cormin, cormax] = getValidInterval([min, max]);
+
+  if (cormin === cormax) { return [cormin]; }
+
+  const count = Math.max(tickCount, 2);
+  const step = getFormatStep((cormax - cormin) / (count - 1), allowDecimals, 0);
+  const values = [...Arithmetic.rangeStep(cormin, cormax - 0.99 * step, step), cormax];
+
+  return min > max ? reverse(values) : values;
+}
+
 export const getNiceTickValues = memoize(getNiceTickValuesFn);
 export const getTickValues = memoize(getTickValuesFn);
+export const getTickValuesFixedDomain = memoize(getTickValuesFixedDomainFn);
+

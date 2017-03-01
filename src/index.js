@@ -1,1 +1,1 @@
-export { getTickValues, getNiceTickValues } from './getNiceTickValues';
+export { getTickValues, getNiceTickValues, getTickValuesFixedDomain } from './getNiceTickValues';
