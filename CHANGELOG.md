@@ -1,3 +1,9 @@
+## 0.3.0 (Mar 01, 2017)
+
+### feat
+
+- Add new ticks function `getTickValuesFixedDomain`
+
 ## 0.2.3 (Feb 28, 2017)
 
 ### fix
