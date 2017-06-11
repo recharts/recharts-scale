@@ -1,3 +1,9 @@
+## 0.3.1 (Jun 11, 2017)
+
+### fix
+
+- fix `getDigitCount` when the number is a scientific notation
+
 ## 0.3.0 (Mar 01, 2017)
 
 ### feat
