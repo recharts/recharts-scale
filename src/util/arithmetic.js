@@ -30,13 +30,8 @@ function getDigitCount(value) {
 
   if (value === 0) {
     result = 1;
-  } else if (abs < 1) {
-    result = Math.floor(Math.log(abs) / Math.log(10)) + 1;
   } else {
-    const str = `${value}`;
-    const ary = str.split('.');
-
-    result = ary[0].length;
+    result = Math.floor(Math.log(abs) / Math.log(10)) + 1;
   }
 
   return result;

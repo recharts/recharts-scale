@@ -162,6 +162,39 @@ describe('getDigitCount', () => {
       expect(Arithmetic.getDigitCount(0)).to.equal(1);
     });
   });
+
+  describe('of 1.1e+21', () => {
+    it('should return 22', () => {
+      console.log(Arithmetic.getDigitCount(1.1e+21));
+      expect(Arithmetic.getDigitCount(1.1e+21)).to.equal(22);
+    });
+  });
+
+  describe('of 1.1e-21', () => {
+    it('should return -20', () => {
+      console.log(Arithmetic.getDigitCount(1.1e-21));
+      expect(Arithmetic.getDigitCount(1.1e-21)).to.equal(-20);
+    });
+  });
+
+  describe('of 12345.67', () => {
+    it('should return 5', () => {
+      console.log(Arithmetic.getDigitCount(12345.67));
+      expect(Arithmetic.getDigitCount(12345.67)).to.equal(5);
+    });
+  });
+  describe('of -12345.67', () => {
+    it('should return 5', () => {
+      console.log(Arithmetic.getDigitCount(-12345.67));
+      expect(Arithmetic.getDigitCount(-12345.67)).to.equal(5);
+    });
+  });
+  describe('of -0.0000007', () => {
+    it('should return -0.0000007', () => {
+      console.log(Arithmetic.getDigitCount(-0.0000007));
+      expect(Arithmetic.getDigitCount(-0.0000007)).to.equal(-6);
+    });
+  });
 });
 
 describe('getDecimalDigitCount', () => {
