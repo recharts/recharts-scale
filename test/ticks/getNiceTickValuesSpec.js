@@ -217,6 +217,16 @@ describe('getNiceTickValues of unequal values', () => {
 
   });
 
+  describe('of float [0.3885416666666666, 0.04444444444444451, 5]', () => {
+    const [min, max, count] = [0.3885416666666666, 0.04444444444444451, 5];
+    const scales = getNiceTickValues([min, max], count);
+
+    it('should return scales of [0.4, 0.3, 0.2, 0.1, 0]', () => {
+      expect(scales).to.eql([0.4, 0.3, 0.2, 0.1, 0]);
+    });
+
+  });
+
   describe('of float [-4.10389, 0.59414, 7]', () => {
     const [min, max, count] = [-4.10389, 0.59414, 7];
     const scales = getNiceTickValues([min, max], count);
