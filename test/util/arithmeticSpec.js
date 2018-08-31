@@ -79,6 +79,54 @@ describe('multiply', () => {
       expect(Arithmetic.multiply(0.12, 0.7)).to.equal(0.084);
     });
   });
+
+  describe('of a huge integer and a integer', () => {
+    it('should js return a long float', () => {
+      expect(7e+30 * 0.8).to.not.equal(5.6e+30);
+    });
+    it('should return a right float', () => {
+      expect(Arithmetic.multiply(7e+30, 0.8)).to.equal(5.6e+30);
+    });
+  });
+
+  describe('of a huge integer and a huge integer', () => {
+    it('should js return a long float', () => {
+      expect(7e+30 * 0.8 + 30).to.not.equal(5.6e+60);
+    });
+    it('should return a right float', () => {
+      expect(Arithmetic.multiply(7e+30, 0.8e+30)).to.equal(5.6e+60);
+    });
+  });
+
+  describe('of a tiny float and a float', () => {
+    it('should return a right float', () => {
+      expect(Arithmetic.multiply(0.12e-30, 0.7)).to.equal(0.084e-30);
+    });
+  });
+
+  describe('of a tiny float and a tiny float', () => {
+    it('should return a right float', () => {
+      expect(Arithmetic.multiply(0.12e-30, 0.7e-30)).to.equal(0.084e-60);
+    });
+  });
+
+  describe('of a huge integer and a tiny float', () => {
+    it('should js return a long float', () => {
+      expect(7e+30 * 0.8e-30).to.not.equal(5.6);
+    });
+    it('should return a right float', () => {
+      expect(Arithmetic.multiply(7e+30, 0.8e-30)).to.equal(5.6);
+    });
+  });
+
+  describe('of a tiny float and a huge integer', () => {
+    it('should js return a long float', () => {
+      expect(0.12e-30 * 0.7e+30).to.not.equal(0.084);
+    });
+    it('should return a right float', () => {
+      expect(Arithmetic.multiply(0.12e-30, 0.7e+30)).to.equal(0.084);
+    });
+  });
 });
 
 describe('divide', () => {
@@ -97,6 +145,21 @@ describe('divide', () => {
     });
     it('should return a right float', () => {
       expect(Arithmetic.divide(0.6, 0.2)).to.equal(3);
+    });
+  });
+
+  describe('of a huge integer and a float', () => {
+    it('should js return a long float', () => {
+      expect(15e+30 / 0.000005).to.not.equal(3e+36);
+    });
+    it('should return a right float', () => {
+      expect(Arithmetic.divide(15e+30, 0.000005)).to.equal(3e+36);
+    });
+  });
+
+  describe('of a huge integer and a huge integer', () => {
+    it('should return a right float', () => {
+      expect(Arithmetic.divide(0.6e+30, 0.2e+30)).to.equal(3);
     });
   });
 });
