@@ -70,11 +70,14 @@ function getDecimalDigitCount(a) {
  * @return {Number}   积
  */
 function multiply(a, b) {
-  const intA = parseInt((`${a}`).replace('.', ''), 10);
-  const intB = parseInt((`${b}`).replace('.', ''), 10);
-  const count = getDecimalDigitCount(a) + getDecimalDigitCount(b);
-
-  return (intA * intB) / Math.pow(10, count);
+  const aryA = `${a}`.split('e');
+  const aryB = `${b}`.split('e');
+  const intA = parseInt(aryA[0].replace('.', ''), 10);
+  const intB = parseInt(aryB[0].replace('.', ''), 10);
+  const count = getDecimalDigitCount(aryA[0]) + getDecimalDigitCount(aryB[0]);
+  const countE = parseInt(aryA[1] || '0', 10) + parseInt(aryB[1] || '0', 10);
+  const aryP = `${intA * intB}`.split('e');
+  return parseFloat(`${aryP[0]}e${parseInt(aryP[1] || '0', 10) - count + countE}`);
 }
 /**
  * 加法运算，解决了js运算的精度问题
@@ -104,12 +107,14 @@ function minus(a, b) {
  * @return {Number}   结果
  */
 function divide(a, b) {
-  const ca = getDecimalDigitCount(a);
-  const cb = getDecimalDigitCount(b);
-  const intA = parseInt((`${a}`).replace('.', ''), 10);
-  const intB = parseInt((`${b}`).replace('.', ''), 10);
-
-  return (intA / intB) * Math.pow(10, cb - ca);
+  const aryA = `${a}`.split('e');
+  const aryB = `${b}`.split('e');
+  const intA = parseInt(aryA[0].replace('.', ''), 10);
+  const intB = parseInt(aryB[0].replace('.', ''), 10);
+  const count = getDecimalDigitCount(aryA[0]) - getDecimalDigitCount(aryB[0]);
+  const countE = parseInt(aryA[1] || '0', 10) - parseInt(aryB[1] || '0', 10);
+  const aryP = `${intA / intB}`.split('e');
+  return parseFloat(`${aryP[0]}e${parseInt(aryP[1] || '0', 10) - count + countE}`);
 }
 
 function modulo(a, b) {
