@@ -40,13 +40,13 @@ function getFormatStep(roughStep, allowDecimals, correctionFactor) {
   const digitCount = Arithmetic.getDigitCount(roughStep);
   // The ratio between the rough step and the smallest number which has a bigger
   // order of magnitudes than the rough step
-  const stepRatio = roughStep / Math.pow(10, digitCount);
+  const digitCountValue = Math.pow(10, digitCount);
+  const stepRatio = roughStep / digitCountValue;
   // When an integer and a float multiplied, the accuracy of result may be wrong
-  const amendStepRatio = digitCount !== 1 ?
-    Arithmetic.multiply(Math.ceil(stepRatio / 0.05) + correctionFactor, 0.05) :
-    Arithmetic.multiply(Math.ceil(stepRatio / 0.1) + correctionFactor, 0.1);
+  const stepRatioScale = digitCount !== 1 ? 0.05 : 0.1;
+  const amendStepRatio = Arithmetic.multiply(Math.ceil(stepRatio / stepRatioScale) + correctionFactor, stepRatioScale);
 
-  const formatStep = Arithmetic.multiply(amendStepRatio, Math.pow(10, digitCount));
+  const formatStep = Arithmetic.multiply(amendStepRatio, digitCountValue);
 
   return allowDecimals ? formatStep : Math.ceil(formatStep);
 }
