@@ -28,6 +28,9 @@
     "url": "https://github.com/recharts/recharts-scale/issues"
   },
   "homepage": "https://github.com/recharts/recharts-scale",
+  "dependencies": {
+    "decimal.js-light": "^2.4.1"
+  },
   "devDependencies": {
     "babel-cli": "^6.10.0",
     "babel-eslint": "^6.1.0",
