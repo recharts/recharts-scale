@@ -256,7 +256,7 @@ describe('getNiceTickValues of unequal values', () => {
 
   });
 
-  describe('of integers [0, 1, 4]', () => {
+  describe('of integers [0, 1, 5]', () => {
     const [min, max, count] = [0, 1, 5];
     const scales = getNiceTickValues([min, max], count);
 
