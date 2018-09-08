@@ -7,27 +7,6 @@ import Decimal from 'decimal.js-light';
 import { curry } from './utils';
 
 /**
- * 把错误的数据转正
- * strip(0.09999999999999998)=0.1
- * @param {Number} num       输入值
- * @param {Number} precision 精度
- * @return {Number} 数值
- */
-function strip(num, precision = 12) {
-  return +parseFloat(num.toPrecision(precision));
-}
-
-/**
- * 判断数据是否为浮点类型
- *
- * @param {Number} num 输入值
- * @return {Boolean} 是否是浮点类型
- */
-function isFloat(num) {
-  return !(new Decimal(num).isint());
-}
-
-/**
  * 获取数值的位数
  * 其中绝对值属于区间[0.1, 1)， 得到的值为0
  * 绝对值属于区间[0.01, 0.1)，得到的位数为 -1
@@ -47,62 +26,6 @@ function getDigitCount(value) {
   }
 
   return result;
-}
-/**
- * 计算数值的小数点后的位数
- * @param  {Number} a 数值，可能为整数，也可能为浮点数
- * @return {Integer}   位数
- */
-function getDecimalDigitCount(a) {
-  const str = a ? `${a}` : '';
-
-  // scientific notation
-  if (str.indexOf('e') >= 0) {
-    return Math.abs(parseInt(str.slice(str.indexOf('e') + 1), 10));
-  }
-  const ary = str.split('.');
-
-  return ary.length > 1 ? ary[1].length : 0;
-}
-/**
- * 乘法运算，解决了js运算的精度问题
- * @param  {Number} a 被乘数
- * @param  {Number} b 乘数
- * @return {Number}   积
- */
-function multiply(a, b) {
-  return new Decimal(a).mul(b).toNumber();
-}
-/**
- * 加法运算，解决了js运算的精度问题
- * @param  {Number} a 被加数
- * @param  {Number} b 加数
- * @return {Number}   和
- */
-function sum(a, b) {
-  return new Decimal(a).add(b).toNumber();
-}
-/**
- * 减法运算，解决了js运算的精度问题
- * @param  {Number} a 被减数
- * @param  {Number} b 减数
- * @return {Number}   差
- */
-function minus(a, b) {
-  return new Decimal(a).sub(b).toNumber();
-}
-/**
- * 除法运算，解决了js运算的精度问题
- * @param  {Number} a 被除数
- * @param  {Number} b 除数
- * @return {Number}   结果
- */
-function divide(a, b) {
-  return new Decimal(a).div(b).toNumber();
-}
-
-function modulo(a, b) {
-  return new Decimal(a).mod(b).toNumber();
 }
 
 /**
@@ -174,16 +97,7 @@ const uninterpolateTruncation = curry((a, b, x) => {
 
 export default {
   rangeStep,
-  isFloat,
   getDigitCount,
-  getDecimalDigitCount,
-
-  sum,
-  minus,
-  multiply,
-  divide,
-  modulo,
-  strip,
 
   interpolateNumber,
   uninterpolateNumber,
