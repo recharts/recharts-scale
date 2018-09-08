@@ -53,10 +53,10 @@ describe('modulo', () => {
 
   describe('of a float and a float', () => {
     it('should js return a long float', () => {
-      expect(-40.54815 % 0.35).to.not.equal(0.05185);
+      expect(-40.54815 % 0.35).to.not.equal(-0.29815);
     });
     it('should return a right float', () => {
-      expect(Arithmetic.modulo(-40.54815, 0.35)).to.equal(0.05185);
+      expect(Arithmetic.modulo(-40.54815, 0.35)).to.equal(-0.29815);
     });
   });
 });

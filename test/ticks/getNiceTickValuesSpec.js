@@ -329,15 +329,15 @@ describe('getTickValues of unequal values', () => {
     const [min, max, count] = [-4.10389, 0.59414, 7];
     const scales = getTickValues([min, max], count);
 
-    it(`should return scales of [-4.10389, -3.10389, -2.10389,
-      -1.1038899999999998, -0.10388999999999982]`, () => {
+    it(`should return scales of [-4.10389, -3.30389, -2.50389,
+      -1.70389, -0.90389, -0.10389]`, () => {
       expect(scales).to.eql([
         -4.10389,
         -3.30389,
-        -2.5038899999999997,
-        -1.7038899999999995,
-        -0.9038899999999996,
-        -0.10388999999999982,
+        -2.50389,
+        -1.70389,
+        -0.90389,
+        -0.10389,
       ]);
     });
 
@@ -347,14 +347,13 @@ describe('getTickValues of unequal values', () => {
     const [min, max, count] = [-4.10389, 0.59414, 7];
     const scales = getTickValues([min, max], count, false);
 
-    it(`should return scales of [-4.10389, -3.30389, -2.5038899999999997,
-      -1.7038899999999995, -0.9038899999999996, -0.10388999999999982]`, () => {
+    it('should return scales of [-4.10389, -3.10389, -2.10389, -1.10389, -0.10389]', () => {
       expect(scales).to.eql([
         -4.10389,
         -3.10389,
         -2.10389,
-        -1.1038899999999998,
-        -0.10388999999999982,
+        -1.10389,
+        -0.10389,
       ]);
     });
   });

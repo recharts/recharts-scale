@@ -3,6 +3,7 @@
  * @author xile611
  * @date 2015-09-17
  */
+import Decimal from 'decimal.js-light';
 import { curry } from './utils';
 
 /**
@@ -23,7 +24,7 @@ function strip(num, precision = 12) {
  * @return {Boolean} 是否是浮点类型
  */
 function isFloat(num) {
-  return /^([+-]?)\d*\.\d+$/.test(num);
+  return !(new Decimal(num).isint());
 }
 
 /**
@@ -36,13 +37,13 @@ function isFloat(num) {
  * @return {Integer} 位数
  */
 function getDigitCount(value) {
-  const abs = Math.abs(value);
   let result;
 
   if (value === 0) {
     result = 1;
   } else {
-    result = Math.floor(Math.log(abs) / Math.log(10)) + 1;
+    result = Math.floor(new Decimal(value).abs().log(10)
+                        .toNumber()) + 1;
   }
 
   return result;
@@ -70,14 +71,7 @@ function getDecimalDigitCount(a) {
  * @return {Number}   积
  */
 function multiply(a, b) {
-  const aryA = `${a}`.split('e');
-  const aryB = `${b}`.split('e');
-  const intA = parseInt(aryA[0].replace('.', ''), 10);
-  const intB = parseInt(aryB[0].replace('.', ''), 10);
-  const count = getDecimalDigitCount(aryA[0]) + getDecimalDigitCount(aryB[0]);
-  const countE = parseInt(aryA[1] || '0', 10) + parseInt(aryB[1] || '0', 10);
-  const aryP = `${intA * intB}`.split('e');
-  return parseFloat(`${aryP[0]}e${parseInt(aryP[1] || '0', 10) - count + countE}`);
+  return new Decimal(a).mul(b).toNumber();
 }
 /**
  * 加法运算，解决了js运算的精度问题
@@ -86,10 +80,7 @@ function multiply(a, b) {
  * @return {Number}   和
  */
 function sum(a, b) {
-  let count = Math.max(getDecimalDigitCount(a), getDecimalDigitCount(b));
-
-  count = Math.pow(10, count);
-  return (multiply(a, count) + multiply(b, count)) / count;
+  return new Decimal(a).add(b).toNumber();
 }
 /**
  * 减法运算，解决了js运算的精度问题
@@ -98,7 +89,7 @@ function sum(a, b) {
  * @return {Number}   差
  */
 function minus(a, b) {
-  return sum(a, -b);
+  return new Decimal(a).sub(b).toNumber();
 }
 /**
  * 除法运算，解决了js运算的精度问题
@@ -107,43 +98,30 @@ function minus(a, b) {
  * @return {Number}   结果
  */
 function divide(a, b) {
-  const aryA = `${a}`.split('e');
-  const aryB = `${b}`.split('e');
-  const intA = parseInt(aryA[0].replace('.', ''), 10);
-  const intB = parseInt(aryB[0].replace('.', ''), 10);
-  const count = getDecimalDigitCount(aryA[0]) - getDecimalDigitCount(aryB[0]);
-  const countE = parseInt(aryA[1] || '0', 10) - parseInt(aryB[1] || '0', 10);
-  const aryP = `${intA / intB}`.split('e');
-  return parseFloat(`${aryP[0]}e${parseInt(aryP[1] || '0', 10) - count + countE}`);
+  return new Decimal(a).div(b).toNumber();
 }
 
 function modulo(a, b) {
-  const mod = Math.abs(b);
-
-  if (b <= 0) { return a; }
-
-  const cnt = Math.floor(a / mod);
-
-  return minus(a, multiply(mod, cnt));
+  return new Decimal(a).mod(b).toNumber();
 }
 
 /**
  * 按照固定的步长获取[start, end)这个区间的数据
  * 并且需要处理js计算精度的问题
  *
- * @param  {Number} start 起点
- * @param  {Number} end   终点，不包含该值
- * @param  {Number} step  步长
- * @return {Array}        若干数值
+ * @param  {Decimal} start 起点
+ * @param  {Decimal} end   终点，不包含该值
+ * @param  {Decimal} step  步长
+ * @return {Array}         若干数值
  */
 function rangeStep(start, end, step) {
-  let num = start;
+  let num = new Decimal(start);
   const result = [];
 
-  while (num < end) {
-    result.push(num);
+  while (num.lt(end)) {
+    result.push(num.toNumber());
 
-    num = sum(num, step);
+    num = num.add(step);
   }
 
   return result;
