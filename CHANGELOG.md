@@ -1,3 +1,9 @@
+## 0.4.0 (Seq 28, 2018)
+
+### feat
+
+- use `decimal.js-light` to handle large number or high precision
+
 ## 0.3.2 (Aug 21, 2017)
 
 ### fix
