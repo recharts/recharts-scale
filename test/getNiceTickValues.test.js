@@ -1,6 +1,8 @@
-import { getNiceTickValues, getTickValues,
-  getTickValuesFixedDomain } from '../src/getNiceTickValues';
 import test from 'ava';
+import {
+  getNiceTickValues, getTickValues,
+  getTickValuesFixedDomain,
+} from '../src/getNiceTickValues';
 
 // getNiceTickValues equal values
 test('getNiceTickValues equal values of positive integer has odd tick count', (t) => {

@@ -9,6 +9,8 @@
     "valid-jsdoc": 2,
     "no-var": 0,
     "vars-on-top": 0,
-    "padded-blocks": 0
+    "padded-blocks": 0,
+    "no-mixed-operators": "off",
+    "no-plusplus": "off"
   }
 }

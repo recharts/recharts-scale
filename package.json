@@ -23,6 +23,7 @@
     "build-umd": "cross-env NODE_ENV=development webpack -p src/index.js -o umd/RechartsScale.js",
     "build-min": "cross-env NODE_ENV=production webpack -p src/index.js -o umd/RechartsScale.min.js",
     "test": "nyc ava",
+    "autofix": "eslint src test --fix",
     "lint": "eslint src test"
   },
   "pre-commit": [

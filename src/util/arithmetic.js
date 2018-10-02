@@ -12,29 +12,21 @@ import { curry } from './utils';
  * absolute value belong to [0.01, 0.1) will get the digit is -1
  * absolute value belong to [0.001, 0.01) will get the digit is -2
  *
- * @param  {Number} value
+ * @param  {Number} value numerical value
  * @return {Integer} digit
  */
 function getDigitCount(value) {
-  let result;
-
-  if (value === 0) {
-    result = 1;
-  } else {
-    result = Math.floor(new Decimal(value).abs().log(10)
-                        .toNumber()) + 1;
-  }
-
-  return result;
+  return value === 0 ? 1 : Math.floor(new Decimal(value).abs().log(10)
+    .toNumber()) + 1;
 }
 
-/**
+/*
  * calculate value of fixed range to get the range value of [start, end)
  * and need to handle precision problem
  *
- * @param  {Decimal} start
- * @param  {Decimal} end   not contain the value
- * @param  {Decimal} step
+ * @param  {Number} start range of start
+ * @param  {Number} end   not contain the value
+ * @param  {Number} step  range step
  * @return {Array}
  */
 function rangeStep(start, end, step) {

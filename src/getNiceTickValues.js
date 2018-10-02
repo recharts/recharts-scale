@@ -4,11 +4,13 @@
  * @date 2015-09-17
  */
 import Decimal from 'decimal.js-light';
-import { compose, range, memoize, map, reverse } from './util/utils';
+import {
+  compose, range, memoize, map, reverse,
+} from './util/utils';
 import Arithmetic from './util/arithmetic';
 
 /**
- * Calculate a interval of a minimum value and a maximum value
+ * calculate a interval of a minimum value and a maximum value
  *
  * @param  {Number} min       The minimum value
  * @param  {Number} max       The maximum value
@@ -26,10 +28,10 @@ function getValidInterval([min, max]) {
 }
 
 /**
- * Calculate the step which is easy to understand between ticks, like 10, 20, 25
+ * calculate the step which is easy to understand between ticks, like 10, 20, 25
  *
  * @param  {Decimal} roughStep        The rough step calculated by deviding the
- * difference by the tickCount
+ *                                    difference by the tickCount
  * @param  {Boolean} allowDecimals    Allow the ticks to be decimals or not
  * @param  {Integer} correctionFactor A correction factor
  * @return {Decimal} The step which is easy to understand between two ticks
@@ -45,7 +47,7 @@ function getFormatStep(roughStep, allowDecimals, correctionFactor) {
   // When an integer and a float multiplied, the accuracy of result may be wrong
   const stepRatioScale = digitCount !== 1 ? 0.05 : 0.1;
   const amendStepRatio = new Decimal(
-    Math.ceil(stepRatio.div(stepRatioScale).toNumber())
+    Math.ceil(stepRatio.div(stepRatioScale).toNumber()),
   ).add(correctionFactor).mul(stepRatioScale);
 
   const formatStep = amendStepRatio.mul(digitCountValue);
@@ -88,7 +90,7 @@ function getTickOfSingleValue(value, tickCount, allowDecimals) {
 
   const fn = compose(
     map(n => middle.add(new Decimal(n - middleIndex).mul(step)).toNumber()),
-    range
+    range,
   );
 
   return fn(0, tickCount);
@@ -118,7 +120,7 @@ function calculateStep(min, max, tickCount, allowDecimals, correctionFactor = 0)
   const step = getFormatStep(
     new Decimal(max).sub(min).div(tickCount - 1),
     allowDecimals,
-    correctionFactor
+    correctionFactor,
   );
 
   // A medial value of ticks
@@ -136,13 +138,13 @@ function calculateStep(min, max, tickCount, allowDecimals, correctionFactor = 0)
 
   let belowCount = Math.ceil(middle.sub(min).div(step).toNumber());
   let upCount = Math.ceil(new Decimal(max).sub(middle).div(step)
-                          .toNumber());
+    .toNumber());
   const scaleCount = belowCount + upCount + 1;
 
   if (scaleCount > tickCount) {
     // When more ticks need to cover the interval, step should be bigger.
     return calculateStep(min, max, tickCount, allowDecimals, correctionFactor + 1);
-  } else if (scaleCount < tickCount) {
+  } if (scaleCount < tickCount) {
     // When less ticks can cover the interval, we should add some additional ticks
     upCount = max > 0 ? upCount + (tickCount - scaleCount) : upCount;
     belowCount = max > 0 ? belowCount : belowCount + (tickCount - scaleCount);
@@ -192,7 +194,7 @@ function getTickValuesFn([min, max], tickCount = 6, allowDecimals = true) {
 
   const fn = compose(
     map(n => new Decimal(cormin).add(new Decimal(n).mul(step)).toNumber()),
-    range
+    range,
   );
 
   const values = fn(0, count).filter(entry => (entry >= cormin && entry <= cormax));
@@ -212,7 +214,7 @@ function getTickValuesFixedDomainFn([min, max], tickCount, allowDecimals = true)
     ...Arithmetic.rangeStep(
       new Decimal(cormin),
       new Decimal(cormax).sub(new Decimal(0.99).mul(step)),
-      step
+      step,
     ),
     cormax,
   ];
@@ -223,4 +225,3 @@ function getTickValuesFixedDomainFn([min, max], tickCount, allowDecimals = true)
 export const getNiceTickValues = memoize(getNiceTickValuesFn);
 export const getTickValues = memoize(getTickValuesFn);
 export const getTickValuesFixedDomain = memoize(getTickValuesFixedDomainFn);
-
