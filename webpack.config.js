@@ -1,13 +1,10 @@
 var webpack = require('webpack')
 
-module.exports = {
-  output: {
-    library: 'RechartsScale',
-    libraryTarget: 'umd',
-  },
+const env = process.env.NODE_ENV;
 
+const config = {
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
         exclude: /node_modules/,
@@ -16,14 +13,19 @@ module.exports = {
     ],
   },
 
-  node: {
-    Buffer: false
-  },
-
   plugins: [
-    new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
     })
   ]
 };
+
+if (env === 'development') {
+  config.mode = 'development';
+}
+
+if (env === 'production') {
+  config.mode = 'production';
+}
+
+module.exports = config;
