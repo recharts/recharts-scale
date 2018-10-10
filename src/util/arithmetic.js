@@ -1,33 +1,41 @@
 /**
- * @fileOverview Common operational method
- * @author xile611, arcthur
- * @date 2018-10-02
+ * @fileOverview 一些公用的运算方法
+ * @author xile611
+ * @date 2015-09-17
  */
 import Decimal from 'decimal.js-light';
 import { curry } from './utils';
 
 /**
- * calculate the digit of numerical value
- * absolute value belong to [0.1, 1) will get the digit is 0
- * absolute value belong to [0.01, 0.1) will get the digit is -1
- * absolute value belong to [0.001, 0.01) will get the digit is -2
+ * 获取数值的位数
+ * 其中绝对值属于区间[0.1, 1)， 得到的值为0
+ * 绝对值属于区间[0.01, 0.1)，得到的位数为 -1
+ * 绝对值属于区间[0.001, 0.01)，得到的位数为 -2
  *
- * @param  {Number} value numerical value
- * @return {Integer} digit
+ * @param  {Number} value 数值
+ * @return {Integer} 位数
  */
 function getDigitCount(value) {
-  return value === 0 ? 1 : Math.floor(new Decimal(value).abs().log(10)
-    .toNumber()) + 1;
+  let result;
+
+  if (value === 0) {
+    result = 1;
+  } else {
+    result = Math.floor(new Decimal(value).abs().log(10)
+      .toNumber()) + 1;
+  }
+
+  return result;
 }
 
-/*
- * calculate value of fixed range to get the range value of [start, end)
- * and need to handle precision problem
+/**
+ * 按照固定的步长获取[start, end)这个区间的数据
+ * 并且需要处理js计算精度的问题
  *
- * @param  {Number} start range of start
- * @param  {Number} end   not contain the value
- * @param  {Number} step  range step
- * @return {Array}
+ * @param  {Decimal} start 起点
+ * @param  {Decimal} end   终点，不包含该值
+ * @param  {Decimal} step  步长
+ * @return {Array}         若干数值
  */
 function rangeStep(start, end, step) {
   let num = new Decimal(start);
@@ -41,14 +49,13 @@ function rangeStep(start, end, step) {
 
   return result;
 }
-
 /**
- * interpolate number
+ * 对数值进行线性插值
  *
- * @param  {Number} a  the extremum of continuous definition domain
- * @param  {Number} b  the extremum of continuous definition domain
- * @param  {Number} t  the number of [0, 1]
- * @return {Number}
+ * @param  {Number} a  定义域的极点
+ * @param  {Number} b  定义域的极点
+ * @param  {Number} t  [0, 1]内的某个值
+ * @return {Number}    定义域内的某个值
  */
 const interpolateNumber = curry((a, b, t) => {
   const newA = +a;
@@ -56,14 +63,13 @@ const interpolateNumber = curry((a, b, t) => {
 
   return newA + t * (newB - newA);
 });
-
 /**
- * inverse operation of interpolate
+ * 线性插值的逆运算
  *
- * @param  {Number} a the extremum of continuous definition domain
- * @param  {Number} b the extremum of continuous definition domain
- * @param  {Number} x the output of interpolate
- * @return {Number}   when x in a ~ b, the output belong to [0, 1]
+ * @param  {Number} a 定义域的极点
+ * @param  {Number} b 定义域的极点
+ * @param  {Number} x 可以认为是插值后的一个输出值
+ * @return {Number}   当x在 a ~ b这个范围内时，返回值属于[0, 1]
  */
 const uninterpolateNumber = curry((a, b, x) => {
   let diff = b - (+a);
@@ -72,15 +78,14 @@ const uninterpolateNumber = curry((a, b, x) => {
 
   return (x - a) / diff;
 });
-
 /**
- * inverse operation of interpolate, and will be truncate
+ * 线性插值的逆运算，并且有截断的操作
  *
- * @param  {Number} a the extremum of continuous definition domain
- * @param  {Number} b the extremum of continuous definition domain
- * @param  {Number} x the output of interpolate
- * @return {Number}   when x in a ~ b, the output belong to [0, 1]，
- *                    when x not in a ~ b, will be truncate the range
+ * @param  {Number} a 定义域的极点
+ * @param  {Number} b 定义域的极点
+ * @param  {Number} x 可以认为是插值后的一个输出值
+ * @return {Number}   当x在 a ~ b这个区间内时，返回值属于[0, 1]，
+ * 当x不在 a ~ b这个区间时，会截断到 a ~ b 这个区间
  */
 const uninterpolateTruncation = curry((a, b, x) => {
   let diff = b - (+a);

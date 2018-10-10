@@ -10,7 +10,7 @@ import {
 import Arithmetic from './util/arithmetic';
 
 /**
- * calculate a interval of a minimum value and a maximum value
+ * Calculate a interval of a minimum value and a maximum value
  *
  * @param  {Number} min       The minimum value
  * @param  {Number} max       The maximum value
@@ -28,10 +28,10 @@ function getValidInterval([min, max]) {
 }
 
 /**
- * calculate the step which is easy to understand between ticks, like 10, 20, 25
+ * Calculate the step which is easy to understand between ticks, like 10, 20, 25
  *
  * @param  {Decimal} roughStep        The rough step calculated by deviding the
- *                                    difference by the tickCount
+ * difference by the tickCount
  * @param  {Boolean} allowDecimals    Allow the ticks to be decimals or not
  * @param  {Integer} correctionFactor A correction factor
  * @return {Decimal} The step which is easy to understand between two ticks
@@ -157,7 +157,7 @@ function calculateStep(min, max, tickCount, allowDecimals, correctionFactor = 0)
   };
 }
 /**
- * Calculate the ticks of an interval
+ * Calculate the ticks of an interval, the count of ticks will be guraranteed
  *
  * @param  {Number}  min, max      min: The minimum value, max: The maximum value
  * @param  {Integer} tickCount     The count of ticks
@@ -168,6 +168,14 @@ function getNiceTickValuesFn([min, max], tickCount = 6, allowDecimals = true) {
   // More than two ticks should be return
   const count = Math.max(tickCount, 2);
   const [cormin, cormax] = getValidInterval([min, max]);
+
+  if (cormin === -Infinity || cormax === Infinity) {
+    const values = cormax === Infinity
+      ? [cormin, ...range(0, tickCount - 1).map(() => Infinity)]
+      : [...range(0, tickCount - 1).map(() => -Infinity), cormax];
+
+    return min > max ? reverse(values) : values;
+  }
 
   if (cormin === cormax) {
     return getTickOfSingleValue(cormin, tickCount, allowDecimals);
@@ -181,10 +189,22 @@ function getNiceTickValuesFn([min, max], tickCount = 6, allowDecimals = true) {
   return min > max ? reverse(values) : values;
 }
 
+/**
+ * Calculate the ticks of an interval, the count of ticks won't be guraranteed
+ *
+ * @param  {Number}  min, max      min: The minimum value, max: The maximum value
+ * @param  {Integer} tickCount     The count of ticks
+ * @param  {Boolean} allowDecimals Allow the ticks to be decimals or not
+ * @return {Array}   ticks
+ */
 function getTickValuesFn([min, max], tickCount = 6, allowDecimals = true) {
   // More than two ticks should be return
   const count = Math.max(tickCount, 2);
   const [cormin, cormax] = getValidInterval([min, max]);
+
+  if (cormin === -Infinity || cormax === Infinity) {
+    return [min, max];
+  }
 
   if (cormin === cormax) {
     return getTickOfSingleValue(cormin, tickCount, allowDecimals);
@@ -202,9 +222,22 @@ function getTickValuesFn([min, max], tickCount = 6, allowDecimals = true) {
   return min > max ? reverse(values) : values;
 }
 
+/**
+ * Calculate the ticks of an interval, the count of ticks won't be guraranteed,
+ * but the domain will be guaranteed
+ *
+ * @param  {Number}  min, max      min: The minimum value, max: The maximum value
+ * @param  {Integer} tickCount     The count of ticks
+ * @param  {Boolean} allowDecimals Allow the ticks to be decimals or not
+ * @return {Array}   ticks
+ */
 function getTickValuesFixedDomainFn([min, max], tickCount, allowDecimals = true) {
   // More than two ticks should be return
   const [cormin, cormax] = getValidInterval([min, max]);
+
+  if (cormin === -Infinity || cormax === Infinity) {
+    return [min, max];
+  }
 
   if (cormin === cormax) { return [cormin]; }
 

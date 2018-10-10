@@ -1,5 +1,5 @@
+import test from 'ava';
 import Arithmetic from '../../src/util/arithmetic';
-
 // rangeStep
 test('of integer step', (t) => {
   const [start, end, step] = [14, 20, 3];

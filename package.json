@@ -22,7 +22,7 @@
     "build-es6": "rimraf es6 && cross-env babel ./src -d es6 --blacklist=es6.modules",
     "build-umd": "cross-env NODE_ENV=development BABEL_ENV=commonjs webpack -p src/index.js -o umd/RechartsScale.js",
     "build-min": "cross-env NODE_ENV=production BABEL_ENV=commonjs webpack -p src/index.js -o umd/RechartsScale.min.js",
-    "test": "nyc ava",
+    "test": "nyc ava --verbose",
     "autofix": "eslint src test --fix",
     "lint": "eslint src test"
   },
@@ -66,7 +66,7 @@
   },
   "ava": {
     "files": [
-      "test/*.test.js"
+      "test/**/*.test.js"
     ],
     "sources": [
       "**/*.js",
