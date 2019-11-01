@@ -39,12 +39,15 @@ function getDigitCount(value) {
  */
 function rangeStep(start, end, step) {
   let num = new Decimal(start);
+  let i = 0;
   const result = [];
 
-  while (num.lt(end)) {
+  // magic number to prevent infinite loop
+  while (num.lt(end) && i < 100000) {
     result.push(num.toNumber());
 
     num = num.add(step);
+    i++;
   }
 
   return result;

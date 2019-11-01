@@ -16,6 +16,25 @@ test('should return right step of float start', (t) => {
   t.deepEqual(result, [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8]);
 });
 
+// of float step
+test('should return right step of small float start', (t) => {
+  const [start, end, step] = [0, 0.0000035000000000000004, 3.5000000000000004e-7];
+  const result = Arithmetic.rangeStep(start, end, step);
+
+  t.deepEqual(result, [
+    0,
+    3.5000000000000004e-7,
+    7.000000000000001e-7,
+    0.0000010500000000000001,
+    0.0000014000000000000001,
+    0.0000017500000000000002,
+    0.0000021000000000000002,
+    0.0000024500000000000003,
+    0.0000028000000000000003,
+    0.0000031500000000000003,
+  ]);
+});
+
 test('should return right step of integer start', (t) => {
   const [start, end, step] = [1, 2, 0.1];
   const result = Arithmetic.rangeStep(start, end, step);

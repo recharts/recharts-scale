@@ -247,3 +247,10 @@ test('of unequal values of Infinity values [-100, Infinity, 5]', (t) => {
 
   t.deepEqual(scales, [-100, Infinity, Infinity, Infinity, Infinity]);
 });
+
+test('of unequal values of very small values [0, 0.000013202017268238587, 5]', (t) => {
+  const [min, max, count] = [0, 0.000013202017268238587, 5];
+  const scales = getNiceTickValues([min, max], count);
+
+  t.deepEqual(scales, [0, 0.0000035, 0.000007, 0.0000105, 0.000014]);
+});
