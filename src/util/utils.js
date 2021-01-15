@@ -1,12 +1,12 @@
-const identity = i => i;
+const identity = (i) => i;
 
 export const PLACE_HOLDER = {
   '@@functional/placeholder': true,
 };
 
-const isPlaceHolder = val => val === PLACE_HOLDER;
+const isPlaceHolder = (val) => val === PLACE_HOLDER;
 
-const curry0 = fn => function _curried(...args) {
+const curry0 = (fn) => function _curried(...args) {
   if (args.length === 0 || args.length === 1 && isPlaceHolder(args[0])) {
     return _curried;
   }
@@ -20,21 +20,21 @@ const curryN = (n, fn) => {
   }
 
   return curry0((...args) => {
-    const argsLength = args.filter(arg => arg !== PLACE_HOLDER).length;
+    const argsLength = args.filter((arg) => arg !== PLACE_HOLDER).length;
 
     if (argsLength >= n) {
       return fn(...args);
     }
 
     return curryN(n - argsLength, curry0((...restArgs) => {
-      const newArgs = args.map(arg => (isPlaceHolder(arg) ? restArgs.shift() : arg));
+      const newArgs = args.map((arg) => (isPlaceHolder(arg) ? restArgs.shift() : arg));
 
       return fn(...newArgs, ...restArgs);
     }));
   });
 };
 
-export const curry = fn => curryN(fn.length, fn);
+export const curry = (fn) => curryN(fn.length, fn);
 
 export const range = (begin, end) => {
   const arr = [];
@@ -51,7 +51,7 @@ export const map = curry((fn, arr) => {
     return arr.map(fn);
   }
 
-  return Object.keys(arr).map(key => arr[key]).map(fn);
+  return Object.keys(arr).map((key) => arr[key]).map(fn);
 });
 
 export const compose = (...args) => {
