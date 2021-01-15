@@ -1,5 +1,5 @@
 # recharts-scale
 
-[![Build Status](https://travis-ci.org/recharts/recharts-scale.svg)](https://travis-ci.org/recharts/recharts-scale)
+[![Build Status](https://github.com/recharts/recharts-scale/workflows/ci/badge.svg)](https://github.com/recharts/recharts-scale/actions)
 
 Scale of Cartesian Coordinates
