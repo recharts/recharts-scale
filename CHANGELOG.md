@@ -1,3 +1,11 @@
+## 0.4.4 (Mar 18, 2021)
+
+### chore
+
+- bring up all dev deps (incl. eslint and webpack) to the latest
+- move CI to Github actions
+- add linting and building to ci pipeline (in addition to unit testing)
+
 ## 0.4.0 (Seq 28, 2018)
 
 ### feat
