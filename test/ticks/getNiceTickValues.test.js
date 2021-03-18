@@ -122,7 +122,6 @@ test('of equal values of negative unpure decomal has even tick count', (t) => {
   t.deepEqual(scales, [-4, -3]);
 });
 
-
 test('of equal values of Infinity', (t) => {
   const [min, max, count] = [Infinity, Infinity, 5];
   const scales = getNiceTickValues([min, max], count);

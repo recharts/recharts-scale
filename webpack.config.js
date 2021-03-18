@@ -1,4 +1,4 @@
-var webpack = require('webpack')
+const { DefinePlugin } = require('webpack');
 
 const env = process.env.NODE_ENV;
 
@@ -14,7 +14,7 @@ const config = {
   },
 
   plugins: [
-    new webpack.DefinePlugin({
+    new DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
     })
   ]

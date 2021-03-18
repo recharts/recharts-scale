@@ -89,7 +89,7 @@ function getTickOfSingleValue(value, tickCount, allowDecimals) {
   const middleIndex = Math.floor((tickCount - 1) / 2);
 
   const fn = compose(
-    map(n => middle.add(new Decimal(n - middleIndex).mul(step)).toNumber()),
+    map((n) => middle.add(new Decimal(n - middleIndex).mul(step)).toNumber()),
     range,
   );
 
@@ -213,11 +213,11 @@ function getTickValuesFn([min, max], tickCount = 6, allowDecimals = true) {
   const step = getFormatStep(new Decimal(cormax).sub(cormin).div(count - 1), allowDecimals, 0);
 
   const fn = compose(
-    map(n => new Decimal(cormin).add(new Decimal(n).mul(step)).toNumber()),
+    map((n) => new Decimal(cormin).add(new Decimal(n).mul(step)).toNumber()),
     range,
   );
 
-  const values = fn(0, count).filter(entry => (entry >= cormin && entry <= cormax));
+  const values = fn(0, count).filter((entry) => (entry >= cormin && entry <= cormax));
 
   return min > max ? reverse(values) : values;
 }
