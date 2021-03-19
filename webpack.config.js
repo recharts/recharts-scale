@@ -3,6 +3,9 @@ const { DefinePlugin } = require('webpack');
 const env = process.env.NODE_ENV;
 
 const config = {
+  output: {
+    filename: `RechartsScale${env === 'production' ? '.min' : ''}.js`,
+  },
   module: {
     rules: [
       {
