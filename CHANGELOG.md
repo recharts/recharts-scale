@@ -1,3 +1,9 @@
+## 0.4.5 (Mar 25, 2021)
+
+### chore
+
+- fix: previous release
+
 ## 0.4.4 (Mar 18, 2021)
 
 ### chore

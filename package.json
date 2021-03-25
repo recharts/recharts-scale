@@ -1,6 +1,6 @@
 {
   "name": "recharts-scale",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "description": "Scale of Cartesian Coordinates",
   "main": "lib/index",
   "module": "es6/index.js",
