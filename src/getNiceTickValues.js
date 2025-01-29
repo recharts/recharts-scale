@@ -7,7 +7,7 @@ import Decimal from 'decimal.js-light';
 import {
   compose, range, memoize, map, reverse,
 } from './util/utils';
-import Arithmetic from './util/arithmetic';
+import { getDigitCount, rangeStep } from './util/arithmetic';
 
 /**
  * Calculate a interval of a minimum value and a maximum value
@@ -39,7 +39,7 @@ function getValidInterval([min, max]) {
 function getFormatStep(roughStep, allowDecimals, correctionFactor) {
   if (roughStep.lte(0)) { return new Decimal(0); }
 
-  const digitCount = Arithmetic.getDigitCount(roughStep.toNumber());
+  const digitCount = getDigitCount(roughStep.toNumber());
   // The ratio between the rough step and the smallest number which has a bigger
   // order of magnitudes than the rough step
   const digitCountValue = new Decimal(10).pow(digitCount);
@@ -73,7 +73,7 @@ function getTickOfSingleValue(value, tickCount, allowDecimals) {
 
     if (absVal < 1) {
       // The step should be a float number when the difference is smaller than 1
-      step = new Decimal(10).pow(Arithmetic.getDigitCount(value) - 1);
+      step = new Decimal(10).pow(getDigitCount(value) - 1);
 
       middle = new Decimal(Math.floor(middle.div(step).toNumber())).mul(step);
     } else if (absVal > 1) {
@@ -184,7 +184,7 @@ function getNiceTickValuesFn([min, max], tickCount = 6, allowDecimals = true) {
   // Get the step between two ticks
   const { step, tickMin, tickMax } = calculateStep(cormin, cormax, count, allowDecimals);
 
-  const values = Arithmetic.rangeStep(tickMin, tickMax.add(new Decimal(0.1).mul(step)), step);
+  const values = rangeStep(tickMin, tickMax.add(new Decimal(0.1).mul(step)), step);
 
   return min > max ? reverse(values) : values;
 }
@@ -244,7 +244,7 @@ function getTickValuesFixedDomainFn([min, max], tickCount, allowDecimals = true)
   const count = Math.max(tickCount, 2);
   const step = getFormatStep(new Decimal(cormax).sub(cormin).div(count - 1), allowDecimals, 0);
   const values = [
-    ...Arithmetic.rangeStep(
+    ...rangeStep(
       new Decimal(cormin),
       new Decimal(cormax).sub(new Decimal(0.99).mul(step)),
       step,
