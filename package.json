@@ -39,6 +39,7 @@
     "url": "https://github.com/recharts/recharts-scale/issues"
   },
   "homepage": "https://github.com/recharts/recharts-scale",
+  "sideEffects": false,
   "dependencies": {
     "decimal.js-light": "^2.4.1"
   },
